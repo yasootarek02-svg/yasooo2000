@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YSOO200 - Social Media Growth</title>
     
-    <!-- مكتبة Firebase -->
+    <!-- إضافة مكتبة Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -20,7 +20,6 @@
             --ig-pink: #c32aa3;
             --tt-dark: #010101;
             --tt-cyan: #25f4ee;
-            --tt-red: #fe2c55;
             --accent: #5865f2;
             --success: #43b581;
             --danger: #f04747;
@@ -35,7 +34,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
 
         body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
-        a { text-decoration: none; color: inherit; cursor: pointer; }
+        a { text-decoration: none; color: inherit; }
 
         /* --- Header --- */
         header {
@@ -56,7 +55,7 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 800;
-            background: -webkit-linear-gradient(45deg, var(--fb-blue), var(--ig-pink), var(--tt-cyan));
+            background: -webkit-linear-gradient(45deg, var(--fb-blue), var(--ig-pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
@@ -103,7 +102,7 @@
         /* --- Order Modal & Payment Methods --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
         .modal-overlay.active { display: flex; }
-        .modal-box { background: var(--bg-card); border-radius: 16px; padding: 30px; max-width: 480px; width: 100%; border: 1px solid rgba(255,255,255,0.1); position: relative; max-height: 90vh; overflow-y: auto;}
+        .modal-box { background: var(--bg-card); border-radius: 16px; padding: 30px; max-width: 480px; width: 100%; border: 1px solid rgba(255,255,255,0.1); position: relative; }
         .modal-box h2 { margin-bottom: 20px; font-size: 1.5rem;}
         .modal-close { position: absolute; top: 15px; right: 20px; cursor: pointer; font-size: 1.5rem; color: var(--text-muted); }
         .form-group { margin-bottom: 15px; }
@@ -182,9 +181,9 @@
     <header>
         <div class="logo" onclick="switchPage('home')">YSOO200</div>
         <nav class="nav-links" id="navLinks">
-            <a href="#" onclick="switchPage('home'); return false;">الرئيسية</a>
-            <a href="#" onclick="switchPage('shop'); return false;">الخدمات</a>
-            <a href="#" class="btn-admin" onclick="openAdmin(); return false;">لوحة التحكم</a>
+            <a href="#" onclick="switchPage('home')">الرئيسية</a>
+            <a href="#" onclick="switchPage('shop')">الخدمات</a>
+            <a href="#" class="btn-admin" onclick="openAdmin()">لوحة التحكم</a>
         </nav>
     </header>
 
@@ -219,9 +218,7 @@
             <button class="btn-primary" style="width: auto; background: var(--ig-pink);" onclick="filterServices('instagram')">إنستغرام</button>
             <button class="btn-primary" style="width: auto; background: var(--tt-dark); border: 1px solid var(--tt-cyan);" onclick="filterServices('tiktok')">تيك توك</button>
         </div>
-        <div class="grid-container" id="shop-grid">
-            <p style="color:var(--text-muted); grid-column: 1/-1; text-align:center;">جاري تحميل الباقات...</p>
-        </div>
+        <div class="grid-container" id="shop-grid"></div>
     </section>
 
     <!-- ADMIN PAGE -->
@@ -322,28 +319,18 @@
     </div>
 
     <script>
-        // ==========================================
-        // 1. إعدادات Firebase (محمية لتجنب تجمد الصفحة)
-        // ==========================================
+        // ✅ تم وضع رابط Firebase الخاص بك هنا
         const FIREBASE_DB_URL = 'https://william-b47a3-default-rtdb.firebaseio.com/';
+        const firebaseConfig = { databaseURL: FIREBASE_DB_URL };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        
+        // 🔑 كلمة المرور
         const ADMIN_PASSWORD = 'admin123';
-        let db = null;
 
-        try {
-            if (typeof firebase !== 'undefined') {
-                const firebaseConfig = { databaseURL: FIREBASE_DB_URL };
-                firebase.initializeApp(firebaseConfig);
-                db = firebase.database();
-            }
-        } catch (error) {
-            console.warn("تم تعطيل الاتصال بقاعدة البيانات مؤقتاً.");
-        }
-
-        // ==========================================
-        // 2. البيانات الافتراضية (تظهر فوراً حتى لو لم يتصل فايربيز)
-        // ==========================================
+        // ✅ تحديث الباقات والأسعار بناءً على الصور + إضافة تيك توك
         const initialPackages = [
-            // Facebook
+            // Facebook Packages (Updated)
             { id: 'fb-1', platform: 'facebook', quantity: 500, price: 25, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-2', platform: 'facebook', quantity: 1000, price: 50, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-3', platform: 'facebook', quantity: 2000, price: 100, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -364,7 +351,7 @@
             { id: 'fb-18', platform: 'facebook', quantity: 19000, price: 1200, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-19', platform: 'facebook', quantity: 20000, price: 1400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
 
-            // Instagram
+            // Instagram Packages (Updated)
             { id: 'ig-1', platform: 'instagram', quantity: 500, price: 70, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-2', platform: 'instagram', quantity: 1000, price: 140, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-3', platform: 'instagram', quantity: 2000, price: 280, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -373,7 +360,7 @@
             { id: 'ig-6', platform: 'instagram', quantity: 5000, price: 700, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-7', platform: 'instagram', quantity: 10000, price: 1400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
 
-            // TikTok
+            // TikTok Packages (New)
             { id: 'tt-1', platform: 'tiktok', quantity: 500, price: 70, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'tt-2', platform: 'tiktok', quantity: 1000, price: 155, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'tt-3', platform: 'tiktok', quantity: 2000, price: 310, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -397,23 +384,37 @@
             { id: 'tt-21', platform: 'tiktok', quantity: 20000, price: 3100, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true }
         ];
 
-        let store = { packages: initialPackages, orders: [] };
-        let isAdminLogged = false;
+        let store = {
+            // تم تغيير الاسم إلى v2 لضمان تحديث الأسعار للجميع
+            packages: JSON.parse(localStorage.getItem('ysoo200_packages_v2')) || initialPackages,
+            orders: []
+        };
 
-        // ==========================================
-        // 3. الدوال الأساسية (تعمل فوراً بدون انتظار)
-        // ==========================================
-        
-        function switchPage(id) {
-            document.querySelectorAll('section').forEach(el => el.classList.remove('active'));
-            const target = document.getElementById('page-' + id);
-            if(target) target.classList.add('active');
-            window.scrollTo(0,0);
-            if(id === 'shop') renderShop('all');
+        function saveState() { localStorage.setItem('ysoo200_packages_v2', JSON.stringify(store.packages)); }
+
+        // دالة لجلب الطلبات من السيرفر وتحديث الواجهة
+        function loadOrdersFromServer(callback) {
+            db.ref('orders').on('value', (snapshot) => {
+                const data = snapshot.val();
+                store.orders = [];
+                if (data) {
+                    for (let key in data) {
+                        store.orders.push({ id: key, ...data[key] });
+                    }
+                }
+                store.orders.reverse();
+                if (callback) callback();
+            });
         }
 
-        function openAdmin() { switchPage('admin'); }
+        function switchPage(id) {
+            document.querySelectorAll('section').forEach(el => el.classList.remove('active'));
+            document.getElementById('page-' + id).classList.add('active');
+            if(id === 'shop') renderShop();
+            window.scrollTo(0,0);
+        }
 
+        // دالة مساعدة لجلب اسم المنصة بالعربية
         function getPlatformName(platform) {
             if (platform === 'facebook') return 'فيسبوك';
             if (platform === 'instagram') return 'إنستغرام';
@@ -424,24 +425,18 @@
         function renderShop(filter = 'all') {
             const grid = document.getElementById('shop-grid');
             grid.innerHTML = '';
-            
-            const items = filter === 'all' 
-                ? store.packages.filter(p => p.active) 
-                : store.packages.filter(p => p.platform === filter && p.active);
-            
+            const items = filter === 'all' ? store.packages : store.packages.filter(p => p.platform === filter && p.active);
             if(items.length === 0) {
-                grid.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1; text-align:center;">لا توجد باقات متاحة حالياً.</p>';
+                grid.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1; text-align:center;">لا توجد باقات متاحة لهذه المنصة.</p>';
                 return;
             }
-            
             items.forEach(pkg => {
-                const badgeClass = pkg.platform === 'facebook' ? 'badge-fb' : (pkg.platform === 'instagram' ? 'badge-ig' : 'badge-tt');
-                const pName = getPlatformName(pkg.platform);
-                
+                // تحديد لون البادج حسب المنصة
+                const badge = pkg.platform === 'facebook' ? 'badge-fb' : (pkg.platform === 'instagram' ? 'badge-ig' : 'badge-tt');
                 const card = document.createElement('div');
                 card.className = 'service-card';
                 card.innerHTML = `
-                    <div class="platform-badge ${badgeClass}">${pName}</div>
+                    <div class="platform-badge ${badge}">${getPlatformName(pkg.platform)}</div>
                     <h3>${pkg.quantity.toLocaleString()}</h3>
                     <div class="price-tag">${pkg.price} ج.م</div>
                     <p style="font-size:0.9rem; color:var(--text-muted);">${pkg.description}</p>
@@ -451,25 +446,33 @@
                 grid.appendChild(card);
             });
         }
-
         function filterServices(platform) { renderShop(platform); }
+
+        let orderStep = 1;
+
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
 
         function openOrder(pkgId) {
             const pkg = store.packages.find(p => p.id === pkgId);
             if(!pkg) return alert('الباقة غير موجودة');
-            
             document.getElementById('orderSteps').style.display = 'block';
             document.getElementById('invoiceBox').classList.remove('active');
             document.getElementById('invoiceBox').style.display = 'none';
             document.getElementById('paymentProof').value = '';
-            
             document.getElementById('modalTitle').innerText = `طلب: ${pkg.quantity.toLocaleString()} متابعين لـ ${getPlatformName(pkg.platform)}`;
             document.getElementById('orderPlatform').value = pkg.platform;
             document.getElementById('orderQuantity').value = pkg.quantity;
             document.getElementById('orderPrice').value = pkg.price + ' ج.م';
-            
             document.querySelectorAll('.order-step').forEach(el => el.classList.remove('active'));
             document.getElementById('step1').classList.add('active');
+            orderStep = 1;
             document.getElementById('orderModal').classList.add('active');
         }
 
@@ -480,7 +483,6 @@
                 const name = document.getElementById('orderName').value;
                 const contact = document.getElementById('orderContact').value;
                 if(!account || !name || !contact) return alert('الرجاء ملء جميع الحقول');
-                
                 document.getElementById('rPlatform').innerText = getPlatformName(document.getElementById('orderPlatform').value);
                 document.getElementById('rQuantity').innerText = document.getElementById('orderQuantity').value;
                 document.getElementById('rPrice').innerText = document.getElementById('orderPrice').value.replace(' ج.م','');
@@ -489,34 +491,12 @@
             }
             document.querySelectorAll('.order-step').forEach(el => el.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
+            orderStep = step;
         }
-        
         function prevStep(step) {
             document.querySelectorAll('.order-step').forEach(el => el.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
-        }
-
-        function closeModal() { document.getElementById('orderModal').classList.remove('active'); }
-
-        function copyInvoiceId() {
-            const inv = document.querySelector('#invoiceContent h4')?.innerText.replace('#','');
-            if(inv) navigator.clipboard.writeText(inv).then(() => { alert('تم نسخ رقم الفاتورة: ' + inv); });
-        }
-
-        function viewPaymentProof(base64Image) {
-            const modal = document.getElementById('imageViewerModal');
-            const img = document.getElementById('viewerImage');
-            if(base64Image) {
-                img.src = base64Image;
-                modal.classList.add('active');
-            } else {
-                alert('لا توجد صورة دفع لهذا الطلب.');
-            }
-        }
-
-        function closeImageViewer() {
-            document.getElementById('imageViewerModal').classList.remove('active');
-            document.getElementById('viewerImage').src = '';
+            orderStep = step;
         }
 
         async function placeOrder() {
@@ -533,12 +513,7 @@
             let proofBase64 = null;
             if(fileInput.files.length > 0) {
                 const file = fileInput.files[0];
-                proofBase64 = await new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = error => reject(error);
-                });
+                proofBase64 = await toBase64(file);
             }
 
             const order = {
@@ -556,16 +531,7 @@
                 paymentProof: proofBase64
             };
 
-            // إذا كان فايربيز متصل، نقوم بالحفظ
-            if (db) {
-                try { await db.ref('orders').push(order); } 
-                catch(e) { console.warn("فشل الحفظ في فايربيز، تم الحفظ محلياً."); }
-            } else {
-                console.warn("فايربيز غير متصل، تم الحفظ محلياً.");
-            }
-            
-            // إضافة الطلب للذاكرة المحلية
-            store.orders.push(order);
+            await db.ref('orders').push(order);
 
             document.getElementById('orderSteps').style.display = 'none';
             const invoiceBox = document.getElementById('invoiceBox');
@@ -597,23 +563,29 @@
             document.getElementById('modalTitle').innerText = 'تم تأكيد الطلب!';
         }
 
-        // ==========================================
-        // 4. دوال لوحة التحكم
-        // ==========================================
-        
+        function closeModal() { document.getElementById('orderModal').classList.remove('active'); }
+
+        function copyInvoiceId() {
+            const inv = document.querySelector('#invoiceContent h4')?.innerText.replace('#','');
+            if(inv) navigator.clipboard.writeText(inv).then(() => { alert('تم نسخ رقم الفاتورة: ' + inv); });
+        }
+
+        function openAdmin() { switchPage('admin'); }
+
         function adminLogin() {
             const pwd = document.getElementById('adminPwd').value;
             if(pwd === ADMIN_PASSWORD) {
-                isAdminLogged = true;
                 document.getElementById('adminLogin').classList.add('hidden');
                 document.getElementById('adminDashboard').style.display = 'block';
-                renderAdminStats();
-                renderAdminOrders();
+                renderAdminPackages(); 
+                loadOrdersFromServer(() => {
+                    renderAdminStats();
+                    renderAdminOrders();
+                });
             } else { alert('كلمة مرور خاطئة.'); }
         }
 
         function logoutAdmin() {
-            isAdminLogged = false;
             document.getElementById('adminLogin').classList.remove('hidden');
             document.getElementById('adminDashboard').style.display = 'none';
             switchPage('home');
@@ -622,6 +594,7 @@
         function showAdminView(view, el) {
             document.querySelectorAll('.admin-sidebar li').forEach(li => li.classList.remove('active'));
             if(el) el.classList.add('active');
+            const content = document.getElementById('adminContent');
             if(view === 'overview') renderAdminStats();
             else if(view === 'orders') renderAdminOrders();
             else if(view === 'packages') renderAdminPackages();
@@ -634,11 +607,10 @@
             const pending = store.orders.filter(o => o.orderStatus === 'pending').length;
             const completed = store.orders.filter(o => o.orderStatus === 'completed').length;
             const totalSales = store.orders.reduce((acc, o) => acc + (o.orderStatus === 'completed' ? o.total : 0), 0);
-            
             const igOrders = store.orders.filter(o => o.platform === 'instagram').length;
             const fbOrders = store.orders.filter(o => o.platform === 'facebook').length;
-            const ttOrders = store.orders.filter(o => o.platform === 'tiktok').length;
-
+            const ttOrders = store.orders.filter(o => o.platform === 'tiktok').length; // إضافة إحصائية تيك توك
+            
             content.innerHTML = `
                 <h3>الملخص</h3>
                 <div class="stats-grid">
@@ -651,6 +623,22 @@
                     <div class="stat-card"><h4>تيك توك</h4><span>${ttOrders}</span></div>
                 </div>
             `;
+        }
+
+        function viewPaymentProof(base64Image) {
+            const modal = document.getElementById('imageViewerModal');
+            const img = document.getElementById('viewerImage');
+            if(base64Image) {
+                img.src = base64Image;
+                modal.classList.add('active');
+            } else {
+                alert('لا توجد صورة دفع لهذا الطلب.');
+            }
+        }
+
+        function closeImageViewer() {
+            document.getElementById('imageViewerModal').classList.remove('active');
+            document.getElementById('viewerImage').src = '';
         }
 
         function renderAdminOrders() {
@@ -697,13 +685,12 @@
 
         function updateOrderStatus(id, status) {
             const order = store.orders.find(o => o.id === id);
-            if(order) order.orderStatus = status;
-            
-            if (db) {
-                db.ref('orders/' + id).update({ orderStatus: status }).catch(e => console.warn(e));
+            if(order) {
+                order.orderStatus = status;
+                db.ref('orders/' + id).update({ orderStatus: status });
+                renderAdminOrders();
+                renderAdminStats();
             }
-            renderAdminOrders();
-            renderAdminStats();
         }
 
         function renderAdminPackages() {
@@ -712,10 +699,10 @@
             <button class="btn-primary" style="width:auto; margin-bottom:15px;" onclick="openAddPackage()">+ إضافة باقة جديدة</button>
             <div class="grid-container">`;
             store.packages.forEach(pkg => {
-                const badgeClass = pkg.platform === 'facebook' ? 'badge-fb' : (pkg.platform === 'instagram' ? 'badge-ig' : 'badge-tt');
+                const badge = pkg.platform === 'facebook' ? 'badge-fb' : (pkg.platform === 'instagram' ? 'badge-ig' : 'badge-tt');
                 html += `
                     <div class="service-card" style="text-align:left;">
-                        <div class="platform-badge ${badgeClass}">${getPlatformName(pkg.platform)}</div>
+                        <div class="platform-badge ${badge}">${getPlatformName(pkg.platform)}</div>
                         <h3 style="font-size:1.5rem; margin:10px 0;">${pkg.quantity.toLocaleString()} متابعين</h3>
                         <p style="color:var(--text-muted);">${pkg.price} ج.م - ${pkg.description}</p>
                         <div style="display:flex; gap:10px; margin-top:15px;">
@@ -737,7 +724,7 @@
             if(qty && price) {
                 const newPkg = { id: 'pkg-' + Date.now(), platform: platform.toLowerCase(), quantity: parseInt(qty), price: parseInt(price), description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true };
                 store.packages.push(newPkg);
-                if(db) db.ref('packages/' + newPkg.id).set(newPkg).catch(e => console.warn(e));
+                saveState();
                 renderAdminPackages();
             }
         }
@@ -748,20 +735,17 @@
             const qty = prompt('تعديل العدد:', pkg.quantity);
             const price = prompt('تعديل السعر:', pkg.price);
             const status = prompt('تحديث الحالة (true/false):', pkg.active);
-            
-            if(qty && price) {
-                pkg.quantity = parseInt(qty);
-                pkg.price = parseInt(price);
-                pkg.active = status === 'true' || status === '1';
-                if(db) db.ref('packages/' + id).update(pkg).catch(e => console.warn(e));
-                renderAdminPackages();
-            }
+            if(qty) pkg.quantity = parseInt(qty);
+            if(price) pkg.price = parseInt(price);
+            pkg.active = status === 'true' || status === '1' ? true : false;
+            saveState();
+            renderAdminPackages();
         }
 
         function deletePackage(id) {
             if(confirm('هل أنت متأكد من حذف هذه الباقة؟')) {
                 store.packages = store.packages.filter(p => p.id !== id);
-                if(db) db.ref('packages/' + id).remove().catch(e => console.warn(e));
+                saveState();
                 renderAdminPackages();
             }
         }
@@ -769,4 +753,15 @@
         function renderAdminInvoices() {
             const content = document.getElementById('adminContent');
             let html = `<h3>سجل الفواتير</h3>
-            <input type="text" placeholder="البحث برقم الفاتورة أو اسم العميل..." onkeyup="filterAdminInvoices(this.value)" s
+            <input type="text" placeholder="البحث برقم الفاتورة أو اسم العميل..." onkeyup="filterAdminInvoices(this.value)" style="width:100%; padding:10px; margin-bottom:15px; background:var(--bg-dark); border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:white;">
+            <table class="admin-table">
+                <thead><tr><th>رقم الفاتورة</th><th>العميل</th><th>المنصة</th><th>الإجمالي</th><th>التاريخ</th><th>عرض</th></tr></thead>
+                <tbody id="adminInvoicesBody">`;
+            store.orders.forEach(o => {
+                html += `
+                    <tr>
+                        <td>${o.invoiceNumber}</td>
+                        <td>${o.customerName}</td>
+                        <td>${getPlatformName(o.platform)}</td>
+                        <td>${o.total} ج.م</td>
+       
