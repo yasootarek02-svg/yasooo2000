@@ -18,6 +18,9 @@
             --text-muted: #9aa0b2;
             --fb-blue: #1877f2;
             --ig-pink: #c32aa3;
+            --tt-dark: #010101;
+            --tt-cyan: #25f4ee;
+            --tt-red: #fe2c55;
             --accent: #5865f2;
             --success: #43b581;
             --danger: #f04747;
@@ -34,7 +37,7 @@
         body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
 
-        /* --- Header (بدون 3 خطوط) --- */
+        /* --- Header --- */
         header {
             background: rgba(11, 13, 21, 0.95);
             backdrop-filter: blur(10px);
@@ -53,7 +56,7 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 800;
-            background: -webkit-linear-gradient(45deg, var(--fb-blue), var(--ig-pink));
+            background: -webkit-linear-gradient(45deg, var(--fb-blue), var(--ig-pink), var(--tt-cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
@@ -85,8 +88,12 @@
         .service-card { background: var(--bg-card); border-radius: 16px; padding: 20px; text-align: center; position: relative; transition: all 0.3s ease; border: 1px solid transparent; overflow: hidden; }
         .service-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .service-card .platform-badge { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; }
+        
+        /* Badges Colors */
         .badge-fb { background: var(--fb-blue); color: white; }
         .badge-ig { background: var(--ig-pink); color: white; }
+        .badge-tt { background: var(--tt-dark); color: white; border: 1px solid var(--tt-cyan); box-shadow: 0 0 5px rgba(37, 244, 238, 0.5); }
+        
         .service-card h3 { font-size: 2.5rem; margin: 15px 0 5px; font-weight: 800; }
         .service-card .price-tag { color: var(--text-muted); font-weight: 600; font-size: 1.1rem; margin-bottom: 5px; }
         .service-card .delivery-info { font-size: 0.8rem; color: var(--success); margin-bottom: 15px; }
@@ -151,7 +158,7 @@
         .btn-edit { background: var(--accent); color: white; }
         .btn-del { background: var(--danger); color: white; }
 
-        /* --- Image Viewer Modal (Fix for Mobile) --- */
+        /* --- Image Viewer Modal --- */
         #imageViewerModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; padding: 20px; }
         #imageViewerModal.active { display: flex; }
         #viewerImage { max-width: 100%; max-height: 80vh; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); object-fit: contain; }
@@ -185,7 +192,7 @@
     <section id="page-home" class="active">
         <div class="hero">
             <h1>انمي حسابك الآن</h1>
-            <p>اشتر متابعين حقيقيين لإنستغرام وفيسبوك. جودة عالية، ضمان مدى الحياة، ودعم فني 24/7.</p>
+            <p>اشتر متابعين حقيقيين لإنستغرام، فيسبوك، وتيك توك. جودة عالية، ضمان مدى الحياة، ودعم فني 24/7.</p>
             <div class="pillars">
                 <div class="pillar"><span style="color: var(--fb-blue);">⚡</span> دعم 24/7</div>
                 <div class="pillar"><span style="color: var(--success);">🛡️</span> ضمان مدى الحياة</div>
@@ -210,6 +217,7 @@
             <button class="btn-primary" style="width: auto;" onclick="filterServices('all')">الكل</button>
             <button class="btn-primary" style="width: auto; background: var(--fb-blue);" onclick="filterServices('facebook')">فيسبوك</button>
             <button class="btn-primary" style="width: auto; background: var(--ig-pink);" onclick="filterServices('instagram')">إنستغرام</button>
+            <button class="btn-primary" style="width: auto; background: var(--tt-dark); border: 1px solid var(--tt-cyan);" onclick="filterServices('tiktok')">تيك توك</button>
         </div>
         <div class="grid-container" id="shop-grid"></div>
     </section>
@@ -249,13 +257,20 @@
             <h2 id="modalTitle">طلب المتابعين</h2>
             <div id="orderSteps">
                 <div class="order-step active" id="step1">
-                    <div class="form-group"><label>المنصة</label><select id="orderPlatform"><option value="instagram">إنستغرام</option><option value="facebook">فيسبوك</option></select></div>
+                    <div class="form-group">
+                        <label>المنصة</label>
+                        <select id="orderPlatform">
+                            <option value="instagram">إنستغرام</option>
+                            <option value="facebook">فيسبوك</option>
+                            <option value="tiktok">تيك توك</option>
+                        </select>
+                    </div>
                     <div class="form-group"><label>العدد</label><input type="number" id="orderQuantity" placeholder="مثال: 500" required></div>
                     <div class="form-group"><label>السعر (ج.م)</label><input type="text" id="orderPrice" readonly></div>
                     <button class="btn-primary" onclick="nextStep(2)">التالي: معلومات الحساب</button>
                 </div>
                 <div class="order-step" id="step2">
-                    <div class="form-group"><label>رابط الحساب أو الصفحة</label><input type="text" id="orderAccount" placeholder="https://www.instagram.com/..." required></div>
+                    <div class="form-group"><label>رابط الحساب أو الصفحة</label><input type="text" id="orderAccount" placeholder="https://www.tiktok.com/@..." required></div>
                     <div class="form-group"><label>اسمك</label><input type="text" id="orderName" placeholder="أحمد علي" required></div>
                     <div class="form-group"><label>رقم التواصل (هاتف أو إيميل)</label><input type="text" id="orderContact" placeholder="01012345678" required></div>
                     <button class="btn-primary" onclick="nextStep(3)">مراجعة الطلب</button>
@@ -305,7 +320,7 @@
     </div>
 
     <script>
-        // ✅ تم وضع رابط Firebase الخاص بك هنا
+        // ✅ رابط Firebase الخاص بك
         const FIREBASE_DB_URL = 'https://william-b47a3-default-rtdb.firebaseio.com/';
         const firebaseConfig = { databaseURL: FIREBASE_DB_URL };
         firebase.initializeApp(firebaseConfig);
@@ -314,43 +329,68 @@
         // 🔑 كلمة المرور
         const ADMIN_PASSWORD = 'admin123';
 
+        // ✅ تحديث الباقات والأسعار بناءً على الصور
         const initialPackages = [
+            // Facebook Packages
             { id: 'fb-1', platform: 'facebook', quantity: 500, price: 25, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-2', platform: 'facebook', quantity: 1000, price: 50, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-3', platform: 'facebook', quantity: 2000, price: 100, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-4', platform: 'facebook', quantity: 3000, price: 150, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-5', platform: 'facebook', quantity: 4000, price: 200, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-6', platform: 'facebook', quantity: 5000, price: 250, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-7', platform: 'facebook', quantity: 6000, price: 300, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-8', platform: 'facebook', quantity: 7000, price: 350, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-9', platform: 'facebook', quantity: 8000, price: 400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-10', platform: 'facebook', quantity: 9000, price: 450, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-11', platform: 'facebook', quantity: 10000, price: 500, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-12', platform: 'facebook', quantity: 11000, price: 550, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-13', platform: 'facebook', quantity: 12000, price: 600, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-14', platform: 'facebook', quantity: 13000, price: 650, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-15', platform: 'facebook', quantity: 14000, price: 700, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-16', platform: 'facebook', quantity: 15000, price: 750, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-17', platform: 'facebook', quantity: 16000, price: 800, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-18', platform: 'facebook', quantity: 17000, price: 850, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-19', platform: 'facebook', quantity: 18000, price: 900, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-20', platform: 'facebook', quantity: 19000, price: 950, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'fb-21', platform: 'facebook', quantity: 20000, price: 1000, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'ig-1', platform: 'instagram', quantity: 500, price: 50, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'ig-2', platform: 'instagram', quantity: 1000, price: 100, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'ig-3', platform: 'instagram', quantity: 2000, price: 200, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'ig-4', platform: 'instagram', quantity: 3000, price: 300, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'ig-5', platform: 'instagram', quantity: 4000, price: 400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'ig-6', platform: 'instagram', quantity: 5000, price: 500, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
-            { id: 'ig-7', platform: 'instagram', quantity: 10000, price: 1000, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-6', platform: 'facebook', quantity: 5000, price: 240, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-7', platform: 'facebook', quantity: 7000, price: 320, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-8', platform: 'facebook', quantity: 8000, price: 360, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-9', platform: 'facebook', quantity: 9000, price: 400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-10', platform: 'facebook', quantity: 10000, price: 450, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-11', platform: 'facebook', quantity: 12000, price: 550, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-12', platform: 'facebook', quantity: 13000, price: 600, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-13', platform: 'facebook', quantity: 14000, price: 650, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-14', platform: 'facebook', quantity: 15000, price: 700, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-15', platform: 'facebook', quantity: 16000, price: 800, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-16', platform: 'facebook', quantity: 17000, price: 900, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-17', platform: 'facebook', quantity: 18000, price: 1000, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-18', platform: 'facebook', quantity: 19000, price: 1200, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'fb-19', platform: 'facebook', quantity: 20000, price: 1400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+
+            // Instagram Packages
+            { id: 'ig-1', platform: 'instagram', quantity: 500, price: 70, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'ig-2', platform: 'instagram', quantity: 1000, price: 140, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'ig-3', platform: 'instagram', quantity: 2000, price: 280, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'ig-4', platform: 'instagram', quantity: 3000, price: 420, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'ig-5', platform: 'instagram', quantity: 4000, price: 560, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'ig-6', platform: 'instagram', quantity: 5000, price: 700, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'ig-7', platform: 'instagram', quantity: 10000, price: 1400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+
+            // TikTok Packages
+            { id: 'tt-1', platform: 'tiktok', quantity: 500, price: 70, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-2', platform: 'tiktok', quantity: 1000, price: 155, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-3', platform: 'tiktok', quantity: 2000, price: 310, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-4', platform: 'tiktok', quantity: 3000, price: 465, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-5', platform: 'tiktok', quantity: 4000, price: 620, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-6', platform: 'tiktok', quantity: 5000, price: 775, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-7', platform: 'tiktok', quantity: 6000, price: 930, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-8', platform: 'tiktok', quantity: 7000, price: 1085, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-9', platform: 'tiktok', quantity: 8000, price: 1240, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-10', platform: 'tiktok', quantity: 9000, price: 1395, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-11', platform: 'tiktok', quantity: 10000, price: 1550, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-12', platform: 'tiktok', quantity: 11000, price: 1705, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-13', platform: 'tiktok', quantity: 12000, price: 1860, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-14', platform: 'tiktok', quantity: 13000, price: 2015, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-15', platform: 'tiktok', quantity: 14000, price: 2170, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-16', platform: 'tiktok', quantity: 15000, price: 2325, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-17', platform: 'tiktok', quantity: 16000, price: 2480, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-18', platform: 'tiktok', quantity: 17000, price: 2635, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-19', platform: 'tiktok', quantity: 18000, price: 2790, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-20', platform: 'tiktok', quantity: 19000, price: 2945, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
+            { id: 'tt-21', platform: 'tiktok', quantity: 20000, price: 3100, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true }
         ];
 
         let store = {
-            packages: JSON.parse(localStorage.getItem('ysoo200_packages')) || initialPackages,
+            packages: JSON.parse(localStorage.getItem('ysoo200_packages_v2')) || initialPackages,
             orders: []
         };
 
-        function saveState() { localStorage.setItem('ysoo200_packages', JSON.stringify(store.packages)); }
+        function saveState() { localStorage.setItem('ysoo200_packages_v2', JSON.stringify(store.packages)); }
 
         // دالة لجلب الطلبات من السيرفر وتحديث الواجهة
         function loadOrdersFromServer(callback) {
@@ -374,20 +414,30 @@
             window.scrollTo(0,0);
         }
 
+        function getPlatformName(platform) {
+            if (platform === 'facebook') return 'فيسبوك';
+            if (platform === 'instagram') return 'إنستغرام';
+            if (platform === 'tiktok') return 'تيك توك';
+            return platform;
+        }
+
         function renderShop(filter = 'all') {
             const grid = document.getElementById('shop-grid');
             grid.innerHTML = '';
-            const items = filter === 'all' ? store.packages : store.packages.filter(p => p.platform === filter && p.active);
+            const items = filter === 'all' ? store.packages.filter(p => p.active) : store.packages.filter(p => p.platform === filter && p.active);
+            
             if(items.length === 0) {
                 grid.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1; text-align:center;">لا توجد باقات متاحة لهذه المنصة.</p>';
                 return;
             }
             items.forEach(pkg => {
-                const badge = pkg.platform === 'facebook' ? 'badge-fb' : 'badge-ig';
+                const badgeClass = pkg.platform === 'facebook' ? 'badge-fb' : (pkg.platform === 'instagram' ? 'badge-ig' : 'badge-tt');
+                const pName = getPlatformName(pkg.platform);
+                
                 const card = document.createElement('div');
                 card.className = 'service-card';
                 card.innerHTML = `
-                    <div class="platform-badge ${badge}">${pkg.platform === 'facebook' ? 'فيسبوك' : 'إنستغرام'}</div>
+                    <div class="platform-badge ${badgeClass}">${pName}</div>
                     <h3>${pkg.quantity.toLocaleString()}</h3>
                     <div class="price-tag">${pkg.price} ج.م</div>
                     <p style="font-size:0.9rem; color:var(--text-muted);">${pkg.description}</p>
@@ -414,14 +464,17 @@
         function openOrder(pkgId) {
             const pkg = store.packages.find(p => p.id === pkgId);
             if(!pkg) return alert('الباقة غير موجودة');
+            
             document.getElementById('orderSteps').style.display = 'block';
             document.getElementById('invoiceBox').classList.remove('active');
             document.getElementById('invoiceBox').style.display = 'none';
             document.getElementById('paymentProof').value = '';
-            document.getElementById('modalTitle').innerText = `طلب: ${pkg.quantity.toLocaleString()} متابعين لـ ${pkg.platform === 'facebook' ? 'فيسبوك' : 'إنستغرام'}`;
+            
+            document.getElementById('modalTitle').innerText = `طلب: ${pkg.quantity.toLocaleString()} متابعين لـ ${getPlatformName(pkg.platform)}`;
             document.getElementById('orderPlatform').value = pkg.platform;
             document.getElementById('orderQuantity').value = pkg.quantity;
             document.getElementById('orderPrice').value = pkg.price + ' ج.م';
+            
             document.querySelectorAll('.order-step').forEach(el => el.classList.remove('active'));
             document.getElementById('step1').classList.add('active');
             orderStep = 1;
@@ -435,7 +488,8 @@
                 const name = document.getElementById('orderName').value;
                 const contact = document.getElementById('orderContact').value;
                 if(!account || !name || !contact) return alert('الرجاء ملء جميع الحقول');
-                document.getElementById('rPlatform').innerText = document.getElementById('orderPlatform').value;
+                
+                document.getElementById('rPlatform').innerText = getPlatformName(document.getElementById('orderPlatform').value);
                 document.getElementById('rQuantity').innerText = document.getElementById('orderQuantity').value;
                 document.getElementById('rPrice').innerText = document.getElementById('orderPrice').value.replace(' ج.م','');
                 document.getElementById('rAccount').innerText = account;
@@ -489,6 +543,8 @@
             const invoiceBox = document.getElementById('invoiceBox');
             invoiceBox.style.display = 'block';
             
+            const pName = getPlatformName(platform);
+
             document.getElementById('invoiceContent').innerHTML = `
                 <div style="border: 1px solid #ddd; padding: 20px; border-radius:8px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #eee; padding-bottom:10px; margin-bottom:15px;">
@@ -501,7 +557,7 @@
                     </div>
                     <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
                         <tr style="background:#f5f5f5;"><th style="padding:8px; text-align:right;">الخدمة</th><th style="padding:8px;">العدد</th><th style="padding:8px;">السعر</th><th style="padding:8px;">الإجمالي</th></tr>
-                        <tr><td style="padding:8px; border-bottom:1px solid #eee;">متابعين ${platform.charAt(0).toUpperCase()+platform.slice(1)}</td><td style="padding:8px; border-bottom:1px solid #eee; text-align:center;">${quantity}</td><td style="padding:8px; border-bottom:1px solid #eee; text-align:center;">${price} ج.م</td><td style="padding:8px; border-bottom:1px solid #eee; text-align:center;">${price} ج.م</td></tr>
+                        <tr><td style="padding:8px; border-bottom:1px solid #eee;">متابعين ${pName}</td><td style="padding:8px; border-bottom:1px solid #eee; text-align:center;">${quantity}</td><td style="padding:8px; border-bottom:1px solid #eee; text-align:center;">${price} ج.م</td><td style="padding:8px; border-bottom:1px solid #eee; text-align:center;">${price} ج.م</td></tr>
                     </table>
                     <div style="text-align:right; font-weight:bold; font-size:1.2rem;">الإجمالي: ${price} ج.م</div>
                     <div style="margin-top:20px; font-size:0.9rem; color:#555; border-top:1px solid #eee; padding-top:15px;">
@@ -557,8 +613,11 @@
             const pending = store.orders.filter(o => o.orderStatus === 'pending').length;
             const completed = store.orders.filter(o => o.orderStatus === 'completed').length;
             const totalSales = store.orders.reduce((acc, o) => acc + (o.orderStatus === 'completed' ? o.total : 0), 0);
+            
             const igOrders = store.orders.filter(o => o.platform === 'instagram').length;
             const fbOrders = store.orders.filter(o => o.platform === 'facebook').length;
+            const ttOrders = store.orders.filter(o => o.platform === 'tiktok').length;
+
             content.innerHTML = `
                 <h3>الملخص</h3>
                 <div class="stats-grid">
@@ -568,6 +627,7 @@
                     <div class="stat-card"><h4>إجمالي المبيعات</h4><span>${totalSales} ج.م</span></div>
                     <div class="stat-card"><h4>إنستغرام</h4><span>${igOrders}</span></div>
                     <div class="stat-card"><h4>فيسبوك</h4><span>${fbOrders}</span></div>
+                    <div class="stat-card"><h4>تيك توك</h4><span>${ttOrders}</span></div>
                 </div>
             `;
         }
@@ -608,7 +668,7 @@
                             <a href="${o.account}" target="_blank" style="color: var(--accent); text-decoration: underline;">${o.account}</a>
                             <button class="btn-sm btn-edit" onclick="navigator.clipboard.writeText('${o.account}').then(()=>alert('تم النسخ!'))" style="padding: 2px 6px; font-size: 0.6rem; margin-top: 2px;">نسخ</button>
                         </td>
-                        <td>${o.platform}</td>
+                        <td>${getPlatformName(o.platform)}</td>
                         <td>${o.quantity}</td>
                         <td>${o.total} ج.م</td>
                         <td>${o.date}</td>
@@ -646,10 +706,10 @@
             <button class="btn-primary" style="width:auto; margin-bottom:15px;" onclick="openAddPackage()">+ إضافة باقة جديدة</button>
             <div class="grid-container">`;
             store.packages.forEach(pkg => {
-                const badge = pkg.platform === 'facebook' ? 'badge-fb' : 'badge-ig';
+                const badgeClass = pkg.platform === 'facebook' ? 'badge-fb' : (pkg.platform === 'instagram' ? 'badge-ig' : 'badge-tt');
                 html += `
                     <div class="service-card" style="text-align:left;">
-                        <div class="platform-badge ${badge}">${pkg.platform}</div>
+                        <div class="platform-badge ${badgeClass}">${getPlatformName(pkg.platform)}</div>
                         <h3 style="font-size:1.5rem; margin:10px 0;">${pkg.quantity.toLocaleString()} متابعين</h3>
                         <p style="color:var(--text-muted);">${pkg.price} ج.م - ${pkg.description}</p>
                         <div style="display:flex; gap:10px; margin-top:15px;">
@@ -664,8 +724,8 @@
         }
 
         function openAddPackage() {
-            const platform = prompt('أدخل المنصة (instagram أو facebook):');
-            if(!platform) return;
+            const platform = prompt('أدخل المنصة (instagram أو facebook أو tiktok):');
+            if(!platform || !['instagram', 'facebook', 'tiktok'].includes(platform.toLowerCase())) return alert('منصة غير صحيحة');
             const qty = prompt('أدخل العدد:');
             const price = prompt('أدخل السعر (ج.م):');
             if(qty && price) {
@@ -709,57 +769,5 @@
                     <tr>
                         <td>${o.invoiceNumber}</td>
                         <td>${o.customerName}</td>
-                        <td>${o.platform}</td>
-                        <td>${o.total} ج.م</td>
-                        <td>${o.date}</td>
-                        <td><button class="btn-sm btn-edit" onclick="viewInvoice('${o.invoiceNumber}')">عرض/طباعة</button></td>
-                    </tr>`;
-            });
-            html += `</tbody></table>`;
-            content.innerHTML = html;
-        }
-
-        function filterAdminInvoices(val) {
-            const rows = document.querySelectorAll('#adminInvoicesBody tr');
-            rows.forEach(row => { const text = row.innerText.toLowerCase(); row.style.display = text.includes(val.toLowerCase()) ? '' : 'none'; });
-        }
-
-        function viewInvoice(invoiceNumber) {
-            const order = store.orders.find(o => o.invoiceNumber === invoiceNumber);
-            if(!order) return alert('الفاتورة غير موجودة');
-            const tempPrint = document.createElement('div');
-            tempPrint.style.position = 'fixed'; tempPrint.style.top = '-9999px'; tempPrint.style.left = '-9999px';
-            document.body.appendChild(tempPrint);
-            tempPrint.innerHTML = `
-                <div style="background:white; color:#333; padding:40px; width:80mm; font-family:Arial, sans-serif; border:1px solid #ccc; border-radius:8px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #eee; padding-bottom:10px; margin-bottom:15px;">
-                        <div><h2 style="font-size:1.5rem; margin:0; color: #333;">YSOO200</h2></div>
-                        <div style="text-align:right;"><h4 style="margin:0;">الفاتورة #${order.invoiceNumber}</h4><small>${order.date}</small></div>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                        <div><strong>العميل:</strong> ${order.customerName}<br><strong>رقم التواصل:</strong> ${order.contact}</div>
-                        <div><strong>الحساب:</strong> ${order.account}</div>
-                    </div>
-                    <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
-                        <tr style="background:#f5f5f5;"><th style="padding:8px; text-align:right;">الخدمة</th><th style="padding:8px;">العدد</th><th style="padding:8px;">الإجمالي</th></tr>
-                        <tr><td style="padding:8px; border-bottom:1px solid #eee;">متابعين ${order.platform}</td><td style="padding:8px; border-bottom:1px solid #eee; text-align:center;">${order.quantity}</td><td style="padding:8px; border-bottom:1px solid #eee; text-align:center;">${order.total} ج.م</td></tr>
-                    </table>
-                    <div style="text-align:right; font-weight:bold; font-size:1.2rem;">الإجمالي: ${order.total} ج.م</div>
-                    <div style="margin-top:20px; font-size:0.9rem; color:#555; border-top:1px solid #eee; padding-top:15px;">
-                        <p><strong>حالة الطلب:</strong> ${order.orderStatus} | <strong>حالة الدفع:</strong> ${order.paymentStatus}</p>
-                        <p>شكراً لاختيارك YSOO200!</p>
-                    </div>
-                </div>
-            `;
-            setTimeout(() => { tempPrint.remove(); }, 1000);
-            window.print();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if(!localStorage.getItem('ysoo200_packages')) { store.packages = initialPackages; saveState(); } 
-            else { store.packages = JSON.parse(localStorage.getItem('ysoo200_packages')); }
-            renderShop();
-        });
-    </script>
-</body>
-</html>
+                        <td>${getPlatformName(o.platform)}</td>
+                        <td>${o.total} 
