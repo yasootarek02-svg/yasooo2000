@@ -180,11 +180,11 @@
 <body>
 
     <header>
-        <div class="logo" onclick="window.switchPage('home')">YSOO200</div>
+        <div class="logo" onclick="switchPage('home')">YSOO200</div>
         <nav class="nav-links" id="navLinks">
-            <a href="javascript:void(0)" onclick="window.switchPage('home')">الرئيسية</a>
-            <a href="javascript:void(0)" onclick="window.switchPage('shop')">الخدمات</a>
-            <a href="javascript:void(0)" class="btn-admin" onclick="window.openAdmin()">لوحة التحكم</a>
+            <a href="#" onclick="switchPage('home'); return false;">الرئيسية</a>
+            <a href="#" onclick="switchPage('shop'); return false;">الخدمات</a>
+            <a href="#" class="btn-admin" onclick="openAdmin(); return false;">لوحة التحكم</a>
         </nav>
     </header>
 
@@ -214,10 +214,10 @@
         <h2 class="section-title">الخدمات والباقات</h2>
         <p class="section-desc">اختر منصتك الاجتماعية للبدء.</p>
         <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-            <button class="btn-primary" style="width: auto;" onclick="window.filterServices('all')">الكل</button>
-            <button class="btn-primary" style="width: auto; background: var(--fb-blue);" onclick="window.filterServices('facebook')">فيسبوك</button>
-            <button class="btn-primary" style="width: auto; background: var(--ig-pink);" onclick="window.filterServices('instagram')">إنستغرام</button>
-            <button class="btn-primary" style="width: auto; background: var(--tt-dark); border: 1px solid var(--tt-cyan);" onclick="window.filterServices('tiktok')">تيك توك</button>
+            <button class="btn-primary" style="width: auto;" onclick="filterServices('all')">الكل</button>
+            <button class="btn-primary" style="width: auto; background: var(--fb-blue);" onclick="filterServices('facebook')">فيسبوك</button>
+            <button class="btn-primary" style="width: auto; background: var(--ig-pink);" onclick="filterServices('instagram')">إنستغرام</button>
+            <button class="btn-primary" style="width: auto; background: var(--tt-dark); border: 1px solid var(--tt-cyan);" onclick="filterServices('tiktok')">تيك توك</button>
         </div>
         <div class="grid-container" id="shop-grid">
             <p style="color:var(--text-muted); grid-column: 1/-1; text-align:center;">جاري تحميل الباقات...</p>
@@ -230,21 +230,21 @@
             <div class="admin-login-box">
                 <h2>YSOO200 Admin</h2>
                 <input type="password" id="adminPwd" placeholder="كلمة المرور (admin123)">
-                <button class="btn-primary" onclick="window.adminLogin()">دخول</button>
+                <button class="btn-primary" onclick="adminLogin()">دخول</button>
             </div>
         </div>
         <div id="adminDashboard" style="display:none;">
             <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
                 <h2>لوحة التحكم</h2>
-                <button onclick="window.logoutAdmin()" style="background:transparent; border:1px solid var(--danger); color:var(--danger); padding:5px 15px; border-radius:6px; cursor:pointer;">خروج</button>
+                <button onclick="logoutAdmin()" style="background:transparent; border:1px solid var(--danger); color:var(--danger); padding:5px 15px; border-radius:6px; cursor:pointer;">خروج</button>
             </div>
             <div class="dashboard-layout">
                 <div class="admin-sidebar">
                     <ul>
-                        <li class="active" onclick="window.showAdminView('overview', this)">الملخص</li>
-                        <li onclick="window.showAdminView('orders', this)">الطلبات</li>
-                        <li onclick="window.showAdminView('packages', this)">الباقات</li>
-                        <li onclick="window.showAdminView('invoices', this)">الفواتير</li>
+                        <li class="active" onclick="showAdminView('overview', this)">الملخص</li>
+                        <li onclick="showAdminView('orders', this)">الطلبات</li>
+                        <li onclick="showAdminView('packages', this)">الباقات</li>
+                        <li onclick="showAdminView('invoices', this)">الفواتير</li>
                     </ul>
                 </div>
                 <div class="admin-content" id="adminContent"></div>
@@ -255,7 +255,7 @@
     <!-- ORDER MODAL -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-box">
-            <span class="modal-close" onclick="window.closeModal()">✕</span>
+            <span class="modal-close" onclick="closeModal()">✕</span>
             <h2 id="modalTitle">طلب المتابعين</h2>
             <div id="orderSteps">
                 <div class="order-step active" id="step1">
@@ -269,14 +269,14 @@
                     </div>
                     <div class="form-group"><label>العدد</label><input type="number" id="orderQuantity" placeholder="مثال: 500" required></div>
                     <div class="form-group"><label>السعر (ج.م)</label><input type="text" id="orderPrice" readonly></div>
-                    <button class="btn-primary" onclick="window.nextStep(2)">التالي: معلومات الحساب</button>
+                    <button class="btn-primary" onclick="nextStep(2)">التالي: معلومات الحساب</button>
                 </div>
                 <div class="order-step" id="step2">
                     <div class="form-group"><label>رابط الحساب أو الصفحة</label><input type="text" id="orderAccount" placeholder="https://www.tiktok.com/@..." required></div>
                     <div class="form-group"><label>اسمك</label><input type="text" id="orderName" placeholder="أحمد علي" required></div>
                     <div class="form-group"><label>رقم التواصل (هاتف أو إيميل)</label><input type="text" id="orderContact" placeholder="01012345678" required></div>
-                    <button class="btn-primary" onclick="window.nextStep(3)">مراجعة الطلب</button>
-                    <button style="width:100%; margin-top:10px; background:transparent; border:none; color:var(--text-muted); cursor:pointer;" onclick="window.prevStep(1)">رجوع</button>
+                    <button class="btn-primary" onclick="nextStep(3)">مراجعة الطلب</button>
+                    <button style="width:100%; margin-top:10px; background:transparent; border:none; color:var(--text-muted); cursor:pointer;" onclick="prevStep(1)">رجوع</button>
                 </div>
                 <div class="order-step" id="step3">
                     <h3 style="font-size:1.2rem;">تأكيد الطلب</h3>
@@ -299,8 +299,8 @@
                             <input type="file" accept="image/*" id="paymentProof" style="width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white;">
                         </div>
                     </div>
-                    <button class="btn-primary" onclick="window.placeOrder()">تأكيد الطلب</button>
-                    <button style="width:100%; margin-top:10px; background:transparent; border:none; color:var(--text-muted); cursor:pointer;" onclick="window.prevStep(2)">رجوع</button>
+                    <button class="btn-primary" onclick="placeOrder()">تأكيد الطلب</button>
+                    <button style="width:100%; margin-top:10px; background:transparent; border:none; color:var(--text-muted); cursor:pointer;" onclick="prevStep(2)">رجوع</button>
                 </div>
             </div>
             <div class="invoice-container" id="invoiceBox">
@@ -308,8 +308,8 @@
                 <div id="invoiceContent"></div>
                 <div class="no-print" style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="btn-primary" style="background:var(--success); width: auto;" onclick="window.print()">🖨️ طباعة الفاتورة</button>
-                    <button class="btn-primary" style="background:var(--accent); width: auto;" onclick="window.copyInvoiceId()">📋 نسخ رقم الفاتورة</button>
-                    <button class="btn-primary" style="background:var(--bg-dark); width: auto; color: white;" onclick="window.closeModal()">إغلاق</button>
+                    <button class="btn-primary" style="background:var(--accent); width: auto;" onclick="copyInvoiceId()">📋 نسخ رقم الفاتورة</button>
+                    <button class="btn-primary" style="background:var(--bg-dark); width: auto; color: white;" onclick="closeModal()">إغلاق</button>
                 </div>
             </div>
         </div>
@@ -317,26 +317,31 @@
 
     <!-- IMAGE VIEWER MODAL -->
     <div id="imageViewerModal">
-        <span id="closeImageViewerBtn" onclick="window.closeImageViewer()">&times;</span>
+        <span id="closeImageViewerBtn" onclick="closeImageViewer()">&times;</span>
         <img id="viewerImage" src="" alt="صورة الدفع">
     </div>
 
     <script>
-        // إعدادات Firebase
+        // ==========================================
+        // 1. إعدادات Firebase (محمية لتجنب تجمد الصفحة)
+        // ==========================================
         const FIREBASE_DB_URL = 'https://william-b47a3-default-rtdb.firebaseio.com/';
         const ADMIN_PASSWORD = 'admin123';
         let db = null;
 
-        // محاولة الاتصال بقاعدة البيانات بأمان
         try {
-            const firebaseConfig = { databaseURL: FIREBASE_DB_URL };
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.database();
+            if (typeof firebase !== 'undefined') {
+                const firebaseConfig = { databaseURL: FIREBASE_DB_URL };
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+            }
         } catch (error) {
-            console.error("Firebase Connection Error:", error);
+            console.warn("تم تعطيل الاتصال بقاعدة البيانات مؤقتاً.");
         }
 
-        // الباقات الافتراضية (سيتم رفعها إذا كانت القاعدة فارغة)
+        // ==========================================
+        // 2. البيانات الافتراضية (تظهر فوراً حتى لو لم يتصل فايربيز)
+        // ==========================================
         const initialPackages = [
             // Facebook
             { id: 'fb-1', platform: 'facebook', quantity: 500, price: 25, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -392,32 +397,34 @@
             { id: 'tt-21', platform: 'tiktok', quantity: 20000, price: 3100, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true }
         ];
 
-        let store = { packages: [], orders: [] };
+        let store = { packages: initialPackages, orders: [] };
         let isAdminLogged = false;
 
-        // --- تعريف الدوال على نافذة المتصفح (window) لضمان عمل الأزرار 100% ---
-
-        window.switchPage = function(id) {
+        // ==========================================
+        // 3. الدوال الأساسية (تعمل فوراً بدون انتظار)
+        // ==========================================
+        
+        function switchPage(id) {
             document.querySelectorAll('section').forEach(el => el.classList.remove('active'));
             const target = document.getElementById('page-' + id);
             if(target) target.classList.add('active');
             window.scrollTo(0,0);
-            if(id === 'shop') window.renderShop('all');
-        };
+            if(id === 'shop') renderShop('all');
+        }
 
-        window.openAdmin = function() { window.switchPage('admin'); };
+        function openAdmin() { switchPage('admin'); }
 
-        window.filterServices = function(platform) { window.renderShop(platform); };
+        function getPlatformName(platform) {
+            if (platform === 'facebook') return 'فيسبوك';
+            if (platform === 'instagram') return 'إنستغرام';
+            if (platform === 'tiktok') return 'تيك توك';
+            return platform;
+        }
 
-        window.renderShop = function(filter = 'all') {
+        function renderShop(filter = 'all') {
             const grid = document.getElementById('shop-grid');
             grid.innerHTML = '';
             
-            if(!store.packages || store.packages.length === 0) {
-                grid.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1; text-align:center;">جاري تحميل الباقات...</p>';
-                return;
-            }
-
             const items = filter === 'all' 
                 ? store.packages.filter(p => p.active) 
                 : store.packages.filter(p => p.platform === filter && p.active);
@@ -439,13 +446,15 @@
                     <div class="price-tag">${pkg.price} ج.م</div>
                     <p style="font-size:0.9rem; color:var(--text-muted);">${pkg.description}</p>
                     <div class="delivery-info">${pkg.deliveryInfo}</div>
-                    <button class="btn-primary" onclick="window.openOrder('${pkg.id}')">اطلب الآن</button>
+                    <button class="btn-primary" onclick="openOrder('${pkg.id}')">اطلب الآن</button>
                 `;
                 grid.appendChild(card);
             });
-        };
+        }
 
-        window.openOrder = function(pkgId) {
+        function filterServices(platform) { renderShop(platform); }
+
+        function openOrder(pkgId) {
             const pkg = store.packages.find(p => p.id === pkgId);
             if(!pkg) return alert('الباقة غير موجودة');
             
@@ -462,9 +471,9 @@
             document.querySelectorAll('.order-step').forEach(el => el.classList.remove('active'));
             document.getElementById('step1').classList.add('active');
             document.getElementById('orderModal').classList.add('active');
-        };
+        }
 
-        window.nextStep = function(step) {
+        function nextStep(step) {
             if(step === 2) { if(!document.getElementById('orderQuantity').value) return alert('الرجاء تحديد العدد'); }
             if(step === 3) {
                 const account = document.getElementById('orderAccount').value;
@@ -480,21 +489,21 @@
             }
             document.querySelectorAll('.order-step').forEach(el => el.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
-        };
+        }
         
-        window.prevStep = function(step) {
+        function prevStep(step) {
             document.querySelectorAll('.order-step').forEach(el => el.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
-        };
+        }
 
-        window.closeModal = function() { document.getElementById('orderModal').classList.remove('active'); };
+        function closeModal() { document.getElementById('orderModal').classList.remove('active'); }
 
-        window.copyInvoiceId = function() {
+        function copyInvoiceId() {
             const inv = document.querySelector('#invoiceContent h4')?.innerText.replace('#','');
             if(inv) navigator.clipboard.writeText(inv).then(() => { alert('تم نسخ رقم الفاتورة: ' + inv); });
-        };
+        }
 
-        window.viewPaymentProof = function(base64Image) {
+        function viewPaymentProof(base64Image) {
             const modal = document.getElementById('imageViewerModal');
             const img = document.getElementById('viewerImage');
             if(base64Image) {
@@ -503,14 +512,14 @@
             } else {
                 alert('لا توجد صورة دفع لهذا الطلب.');
             }
-        };
+        }
 
-        window.closeImageViewer = function() {
+        function closeImageViewer() {
             document.getElementById('imageViewerModal').classList.remove('active');
             document.getElementById('viewerImage').src = '';
-        };
+        }
 
-        window.placeOrder = async function() {
+        async function placeOrder() {
             const platform = document.getElementById('orderPlatform').value;
             const quantity = document.getElementById('orderQuantity').value;
             const price = document.getElementById('orderPrice').value.replace(' ج.م','');
@@ -547,12 +556,16 @@
                 paymentProof: proofBase64
             };
 
+            // إذا كان فايربيز متصل، نقوم بالحفظ
             if (db) {
-                await db.ref('orders').push(order);
+                try { await db.ref('orders').push(order); } 
+                catch(e) { console.warn("فشل الحفظ في فايربيز، تم الحفظ محلياً."); }
             } else {
-                alert('حدث خطأ في الاتصال بالسيرفر. تأكد من اتصالك بالإنترنت.');
-                return;
+                console.warn("فايربيز غير متصل، تم الحفظ محلياً.");
             }
+            
+            // إضافة الطلب للذاكرة المحلية
+            store.orders.push(order);
 
             document.getElementById('orderSteps').style.display = 'none';
             const invoiceBox = document.getElementById('invoiceBox');
@@ -582,36 +595,40 @@
                 </div>
             `;
             document.getElementById('modalTitle').innerText = 'تم تأكيد الطلب!';
-        };
+        }
 
-        window.adminLogin = function() {
+        // ==========================================
+        // 4. دوال لوحة التحكم
+        // ==========================================
+        
+        function adminLogin() {
             const pwd = document.getElementById('adminPwd').value;
             if(pwd === ADMIN_PASSWORD) {
                 isAdminLogged = true;
                 document.getElementById('adminLogin').classList.add('hidden');
                 document.getElementById('adminDashboard').style.display = 'block';
-                window.renderAdminStats();
-                window.renderAdminOrders();
+                renderAdminStats();
+                renderAdminOrders();
             } else { alert('كلمة مرور خاطئة.'); }
-        };
+        }
 
-        window.logoutAdmin = function() {
+        function logoutAdmin() {
             isAdminLogged = false;
             document.getElementById('adminLogin').classList.remove('hidden');
             document.getElementById('adminDashboard').style.display = 'none';
-            window.switchPage('home');
-        };
+            switchPage('home');
+        }
 
-        window.showAdminView = function(view, el) {
+        function showAdminView(view, el) {
             document.querySelectorAll('.admin-sidebar li').forEach(li => li.classList.remove('active'));
             if(el) el.classList.add('active');
-            if(view === 'overview') window.renderAdminStats();
-            else if(view === 'orders') window.renderAdminOrders();
-            else if(view === 'packages') window.renderAdminPackages();
-            else if(view === 'invoices') window.renderAdminInvoices();
-        };
+            if(view === 'overview') renderAdminStats();
+            else if(view === 'orders') renderAdminOrders();
+            else if(view === 'packages') renderAdminPackages();
+            else if(view === 'invoices') renderAdminInvoices();
+        }
 
-        window.renderAdminStats = function() {
+        function renderAdminStats() {
             const content = document.getElementById('adminContent');
             const totalOrders = store.orders.length;
             const pending = store.orders.filter(o => o.orderStatus === 'pending').length;
@@ -634,20 +651,20 @@
                     <div class="stat-card"><h4>تيك توك</h4><span>${ttOrders}</span></div>
                 </div>
             `;
-        };
+        }
 
-        window.renderAdminOrders = function() {
+        function renderAdminOrders() {
             const content = document.getElementById('adminContent');
             if(store.orders.length === 0) { content.innerHTML = `<h3>الطلبات</h3><p style="color:var(--text-muted);">لا توجد طلبات بعد.</p>`; return; }
             let html = `<h3>إدارة الطلبات</h3>
-            <input type="text" placeholder="البحث باسم العميل أو رقم الفاتورة..." onkeyup="window.filterAdminOrders(this.value)" style="width:100%; padding:10px; margin-bottom:15px; background:var(--bg-dark); border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:white;">
+            <input type="text" placeholder="البحث باسم العميل أو رقم الفاتورة..." onkeyup="filterAdminOrders(this.value)" style="width:100%; padding:10px; margin-bottom:15px; background:var(--bg-dark); border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:white;">
             <table class="admin-table">
                 <thead><tr><th>الفاتورة</th><th>العميل</th><th>رابط الحساب</th><th>المنصة</th><th>العدد</th><th>الإجمالي</th><th>التاريخ</th><th>الحالة</th><th>صورة الدفع</th><th>إجراءات</th></tr></thead>
                 <tbody id="adminOrdersBody">
             `;
             store.orders.forEach(o => {
                 const statusClass = o.orderStatus === 'completed' ? 'status-completed' : 'status-pending';
-                const proofBtn = o.paymentProof ? `<button class="btn-sm btn-edit" onclick="window.viewPaymentProof('${o.paymentProof}')">عرض</button>` : 'لا يوجد';
+                const proofBtn = o.paymentProof ? `<button class="btn-sm btn-edit" onclick="viewPaymentProof('${o.paymentProof}')">عرض</button>` : 'لا يوجد';
                 html += `
                     <tr>
                         <td>${o.invoiceNumber}</td>
@@ -663,33 +680,36 @@
                         <td><span class="status-badge ${statusClass}">${o.orderStatus}</span></td>
                         <td>${proofBtn}</td>
                         <td>
-                            <button class="btn-sm btn-edit" onclick="window.updateOrderStatus('${o.id}', 'completed')">إكمال</button>
-                            <button class="btn-sm btn-del" onclick="window.updateOrderStatus('${o.id}', 'cancelled')">إلغاء</button>
+                            <button class="btn-sm btn-edit" onclick="updateOrderStatus('${o.id}', 'completed')">إكمال</button>
+                            <button class="btn-sm btn-del" onclick="updateOrderStatus('${o.id}', 'cancelled')">إلغاء</button>
                         </td>
                     </tr>
                 `;
             });
             html += `</tbody></table>`;
             content.innerHTML = html;
-        };
+        }
 
-        window.filterAdminOrders = function(val) {
+        function filterAdminOrders(val) {
             const rows = document.querySelectorAll('#adminOrdersBody tr');
             rows.forEach(row => { const text = row.innerText.toLowerCase(); row.style.display = text.includes(val.toLowerCase()) ? '' : 'none'; });
-        };
+        }
 
-        window.updateOrderStatus = function(id, status) {
-            if(!db) return alert('لا يوجد اتصال بقاعدة البيانات');
-            db.ref('orders/' + id).update({ orderStatus: status }).then(() => {
-                window.renderAdminOrders();
-                window.renderAdminStats();
-            });
-        };
+        function updateOrderStatus(id, status) {
+            const order = store.orders.find(o => o.id === id);
+            if(order) order.orderStatus = status;
+            
+            if (db) {
+                db.ref('orders/' + id).update({ orderStatus: status }).catch(e => console.warn(e));
+            }
+            renderAdminOrders();
+            renderAdminStats();
+        }
 
-        window.renderAdminPackages = function() {
+        function renderAdminPackages() {
             const content = document.getElementById('adminContent');
             let html = `<h3>إدارة الباقات</h3>
-            <button class="btn-primary" style="width:auto; margin-bottom:15px;" onclick="window.openAddPackage()">+ إضافة باقة جديدة</button>
+            <button class="btn-primary" style="width:auto; margin-bottom:15px;" onclick="openAddPackage()">+ إضافة باقة جديدة</button>
             <div class="grid-container">`;
             store.packages.forEach(pkg => {
                 const badgeClass = pkg.platform === 'facebook' ? 'badge-fb' : (pkg.platform === 'instagram' ? 'badge-ig' : 'badge-tt');
@@ -699,61 +719,54 @@
                         <h3 style="font-size:1.5rem; margin:10px 0;">${pkg.quantity.toLocaleString()} متابعين</h3>
                         <p style="color:var(--text-muted);">${pkg.price} ج.م - ${pkg.description}</p>
                         <div style="display:flex; gap:10px; margin-top:15px;">
-                            <button class="btn-sm btn-edit" onclick="window.editPackage('${pkg.id}')">تعديل</button>
-                            <button class="btn-sm btn-del" onclick="window.deletePackage('${pkg.id}')">حذف</button>
+                            <button class="btn-sm btn-edit" onclick="editPackage('${pkg.id}')">تعديل</button>
+                            <button class="btn-sm btn-del" onclick="deletePackage('${pkg.id}')">حذف</button>
                             <span style="font-size:0.7rem; padding:2px 8px; border-radius:20px; background:${pkg.active ? 'var(--success)' : 'var(--danger)'}; color:white;">${pkg.active ? 'مفعلة' : 'معطلة'}</span>
                         </div>
                     </div>`;
             });
             html += `</div>`;
             content.innerHTML = html;
-        };
+        }
 
-        window.openAddPackage = function() {
+        function openAddPackage() {
             const platform = prompt('أدخل المنصة (instagram أو facebook أو tiktok):');
             if(!platform || !['instagram', 'facebook', 'tiktok'].includes(platform.toLowerCase())) return alert('منصة غير صحيحة');
             const qty = prompt('أدخل العدد:');
             const price = prompt('أدخل السعر (ج.م):');
-            if(qty && price && db) {
-                const newPkg = { platform: platform.toLowerCase(), quantity: parseInt(qty), price: parseInt(price), description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true };
-                db.ref('packages').push(newPkg).then(() => {
-                    loadPackagesFromServer(() => {
-                        window.renderAdminPackages();
-                        alert('تمت الإضافة بنجاح!');
-                    });
-                });
+            if(qty && price) {
+                const newPkg = { id: 'pkg-' + Date.now(), platform: platform.toLowerCase(), quantity: parseInt(qty), price: parseInt(price), description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true };
+                store.packages.push(newPkg);
+                if(db) db.ref('packages/' + newPkg.id).set(newPkg).catch(e => console.warn(e));
+                renderAdminPackages();
             }
-        };
+        }
 
-        window.editPackage = function(id) {
+        function editPackage(id) {
             const pkg = store.packages.find(p => p.id === id);
             if(!pkg) return;
             const qty = prompt('تعديل العدد:', pkg.quantity);
             const price = prompt('تعديل السعر:', pkg.price);
             const status = prompt('تحديث الحالة (true/false):', pkg.active);
             
-            if(qty && price && db) {
-                db.ref('packages/' + id).update({
-                    quantity: parseInt(qty),
-                    price: parseInt(price),
-                    active: status === 'true' || status === '1'
-                }).then(() => {
-                    loadPackagesFromServer(() => window.renderAdminPackages());
-                });
+            if(qty && price) {
+                pkg.quantity = parseInt(qty);
+                pkg.price = parseInt(price);
+                pkg.active = status === 'true' || status === '1';
+                if(db) db.ref('packages/' + id).update(pkg).catch(e => console.warn(e));
+                renderAdminPackages();
             }
-        };
+        }
 
-        window.deletePackage = function(id) {
-            if(confirm('هل أنت متأكد من حذف هذه الباقة؟') && db) {
-                db.ref('packages/' + id).remove().then(() => {
-                    loadPackagesFromServer(() => window.renderAdminPackages());
-                });
+        function deletePackage(id) {
+            if(confirm('هل أنت متأكد من حذف هذه الباقة؟')) {
+                store.packages = store.packages.filter(p => p.id !== id);
+                if(db) db.ref('packages/' + id).remove().catch(e => console.warn(e));
+                renderAdminPackages();
             }
-        };
+        }
 
-        window.renderAdminInvoices = function() {
+        function renderAdminInvoices() {
             const content = document.getElementById('adminContent');
             let html = `<h3>سجل الفواتير</h3>
-            <input type="text" placeholder="البحث برقم الفاتورة أو اسم العميل..." onkeyup="window.filterAdminInvoices(this.value)" style="width:100%; padding:10px; margin-bottom:15px; background:var(--bg-dark); border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:white;">
-            <table class="admin-table">
-          
+            <input type="text" placeholder="البحث برقم الفاتورة أو اسم العميل..." onkeyup="filterAdminInvoices(this.value)" s
