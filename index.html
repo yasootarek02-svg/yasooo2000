@@ -63,13 +63,13 @@
         }
 
         .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { font-weight: 600; transition: color 0.3s; font-size: 0.95rem; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+        .nav-links a { font-weight: 600; transition: color 0.3s; font-size: 0.95rem; padding: 8px 12px; border-radius: 6px; cursor: pointer; user-select: none; }
         .nav-links a:hover { color: var(--accent); background: rgba(255,255,255,0.05); }
         .btn-admin { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1); }
 
         /* --- Main Sections --- */
         section { padding: 100px 5% 60px; display: none; animation: fadeIn 0.6s ease; }
-        section.active { display: block; }
+        section.active { display: block !important; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- Home Hero --- */
@@ -180,9 +180,9 @@
     <header>
         <div class="logo" onclick="switchPage('home')">YSOO200</div>
         <nav class="nav-links" id="navLinks">
-            <a onclick="switchPage('home')">الرئيسية</a>
-            <a onclick="switchPage('shop')">الخدمات</a>
-            <a class="btn-admin" onclick="openAdmin()">لوحة التحكم</a>
+            <a href="javascript:void(0)" onclick="switchPage('home')">الرئيسية</a>
+            <a href="javascript:void(0)" onclick="switchPage('shop')">الخدمات</a>
+            <a href="javascript:void(0)" class="btn-admin" onclick="openAdmin()">لوحة التحكم</a>
         </nav>
     </header>
 
@@ -405,14 +405,19 @@
             });
         }
 
-        function switchPage(id) {
-            document.querySelectorAll('section').forEach(el => el.classList.remove('active'));
-            const targetPage = document.getElementById('page-' + id);
-            if(targetPage) {
-                targetPage.classList.add('active');
+        function switchPage(pageId) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(sec => sec.classList.remove('active'));
+            
+            const targetSection = document.getElementById('page-' + pageId);
+            if (targetSection) {
+                targetSection.classList.add('active');
             }
-            if(id === 'shop') renderShop();
-            window.scrollTo(0,0);
+            
+            if (pageId === 'shop') {
+                renderShop('all');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function renderShop(filter = 'all') {
@@ -768,4 +773,13 @@
 
         function filterAdminInvoices(val) {
             const rows = document.querySelectorAll('#adminInvoicesBody tr');
-            rows.forEach(row => { const text = row.innerText.toLowerCase(); r
+            rows.forEach(row => { const text = row.innerText.toLowerCase(); row.style.display = text.includes(val.toLowerCase()) ? '' : 'none'; });
+        }
+
+        // تهيئة العرض الأولية
+        window.addEventListener('DOMContentLoaded', () => {
+            switchPage('home');
+        });
+    </script>
+</body>
+</html>
