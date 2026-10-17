@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YSOO200 - Social Media Growth</title>
     
-    <!-- إضافة مكتبة Firebase -->
+    <!-- مكتبة Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -35,7 +35,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
 
         body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
-        a { text-decoration: none; color: inherit; }
+        a { text-decoration: none; color: inherit; cursor: pointer; }
 
         /* --- Header --- */
         header {
@@ -60,7 +60,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
-            cursor: pointer;
         }
 
         .nav-links { display: flex; gap: 25px; align-items: center; }
@@ -103,7 +102,7 @@
         /* --- Order Modal & Payment Methods --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
         .modal-overlay.active { display: flex; }
-        .modal-box { background: var(--bg-card); border-radius: 16px; padding: 30px; max-width: 480px; width: 100%; border: 1px solid rgba(255,255,255,0.1); position: relative; }
+        .modal-box { background: var(--bg-card); border-radius: 16px; padding: 30px; max-width: 480px; width: 100%; border: 1px solid rgba(255,255,255,0.1); position: relative; max-height: 90vh; overflow-y: auto;}
         .modal-box h2 { margin-bottom: 20px; font-size: 1.5rem;}
         .modal-close { position: absolute; top: 15px; right: 20px; cursor: pointer; font-size: 1.5rem; color: var(--text-muted); }
         .form-group { margin-bottom: 15px; }
@@ -182,9 +181,9 @@
     <header>
         <div class="logo" onclick="switchPage('home')">YSOO200</div>
         <nav class="nav-links" id="navLinks">
-            <a href="#" onclick="switchPage('home')">الرئيسية</a>
-            <a href="#" onclick="switchPage('shop')">الخدمات</a>
-            <a href="#" class="btn-admin" onclick="openAdmin()">لوحة التحكم</a>
+            <a href="javascript:void(0)" onclick="switchPage('home')">الرئيسية</a>
+            <a href="javascript:void(0)" onclick="switchPage('shop')">الخدمات</a>
+            <a href="javascript:void(0)" class="btn-admin" onclick="openAdmin()">لوحة التحكم</a>
         </nav>
     </header>
 
@@ -219,7 +218,10 @@
             <button class="btn-primary" style="width: auto; background: var(--ig-pink);" onclick="filterServices('instagram')">إنستغرام</button>
             <button class="btn-primary" style="width: auto; background: var(--tt-dark); border: 1px solid var(--tt-cyan);" onclick="filterServices('tiktok')">تيك توك</button>
         </div>
-        <div class="grid-container" id="shop-grid"></div>
+        <div class="grid-container" id="shop-grid">
+            <!-- سيتم تحميل الباقات هنا من فايربيز -->
+            <p style="color:var(--text-muted); grid-column: 1/-1; text-align:center;">جاري تحميل الباقات...</p>
+        </div>
     </section>
 
     <!-- ADMIN PAGE -->
@@ -320,7 +322,7 @@
     </div>
 
     <script>
-        // ✅ رابط Firebase الخاص بك
+        // ✅ إعدادات Firebase
         const FIREBASE_DB_URL = 'https://william-b47a3-default-rtdb.firebaseio.com/';
         const firebaseConfig = { databaseURL: FIREBASE_DB_URL };
         firebase.initializeApp(firebaseConfig);
@@ -329,9 +331,9 @@
         // 🔑 كلمة المرور
         const ADMIN_PASSWORD = 'admin123';
 
-        // ✅ تحديث الباقات والأسعار بناءً على الصور
+        // ✅ الباقات الافتراضية (سيتم رفعها لـ Firebase إذا كانت القاعدة فارغة)
         const initialPackages = [
-            // Facebook Packages
+            // Facebook
             { id: 'fb-1', platform: 'facebook', quantity: 500, price: 25, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-2', platform: 'facebook', quantity: 1000, price: 50, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-3', platform: 'facebook', quantity: 2000, price: 100, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -352,7 +354,7 @@
             { id: 'fb-18', platform: 'facebook', quantity: 19000, price: 1200, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-19', platform: 'facebook', quantity: 20000, price: 1400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
 
-            // Instagram Packages
+            // Instagram
             { id: 'ig-1', platform: 'instagram', quantity: 500, price: 70, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-2', platform: 'instagram', quantity: 1000, price: 140, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-3', platform: 'instagram', quantity: 2000, price: 280, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -361,7 +363,7 @@
             { id: 'ig-6', platform: 'instagram', quantity: 5000, price: 700, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-7', platform: 'instagram', quantity: 10000, price: 1400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
 
-            // TikTok Packages
+            // TikTok
             { id: 'tt-1', platform: 'tiktok', quantity: 500, price: 70, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'tt-2', platform: 'tiktok', quantity: 1000, price: 155, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'tt-3', platform: 'tiktok', quantity: 2000, price: 310, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -386,13 +388,30 @@
         ];
 
         let store = {
-            packages: JSON.parse(localStorage.getItem('ysoo200_packages_v2')) || initialPackages,
+            packages: [],
             orders: []
         };
 
-        function saveState() { localStorage.setItem('ysoo200_packages_v2', JSON.stringify(store.packages)); }
+        let isAdminLogged = false;
 
-        // دالة لجلب الطلبات من السيرفر وتحديث الواجهة
+        // ✅ جلب الباقات من Firebase
+        function loadPackagesFromServer(callback) {
+            db.ref('packages').once('value').then((snapshot) => {
+                const data = snapshot.val();
+                if (!data) {
+                    // إذا كانت قاعدة البيانات فارغة، قم برفع الباقات الافتراضية
+                    initialPackages.forEach(pkg => {
+                        db.ref('packages/' + pkg.id).set(pkg);
+                    });
+                    store.packages = initialPackages;
+                } else {
+                    store.packages = Object.keys(data).map(key => ({ ...data[key], id: key }));
+                }
+                if (callback) callback();
+            });
+        }
+
+        // ✅ جلب الطلبات من Firebase
         function loadOrdersFromServer(callback) {
             db.ref('orders').on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -410,8 +429,8 @@
         function switchPage(id) {
             document.querySelectorAll('section').forEach(el => el.classList.remove('active'));
             document.getElementById('page-' + id).classList.add('active');
-            if(id === 'shop') renderShop();
             window.scrollTo(0,0);
+            if(id === 'shop') renderShop();
         }
 
         function getPlatformName(platform) {
@@ -424,12 +443,16 @@
         function renderShop(filter = 'all') {
             const grid = document.getElementById('shop-grid');
             grid.innerHTML = '';
-            const items = filter === 'all' ? store.packages.filter(p => p.active) : store.packages.filter(p => p.platform === filter && p.active);
+            
+            const items = filter === 'all' 
+                ? store.packages.filter(p => p.active) 
+                : store.packages.filter(p => p.platform === filter && p.active);
             
             if(items.length === 0) {
-                grid.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1; text-align:center;">لا توجد باقات متاحة لهذه المنصة.</p>';
+                grid.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1; text-align:center;">لا توجد باقات متاحة حالياً.</p>';
                 return;
             }
+            
             items.forEach(pkg => {
                 const badgeClass = pkg.platform === 'facebook' ? 'badge-fb' : (pkg.platform === 'instagram' ? 'badge-ig' : 'badge-tt');
                 const pName = getPlatformName(pkg.platform);
@@ -447,9 +470,9 @@
                 grid.appendChild(card);
             });
         }
+
         function filterServices(platform) { renderShop(platform); }
 
-        let currentOrderPackage = null;
         let orderStep = 1;
 
         function toBase64(file) {
@@ -499,6 +522,7 @@
             document.getElementById('step' + step).classList.add('active');
             orderStep = step;
         }
+        
         function prevStep(step) {
             document.querySelectorAll('.order-step').forEach(el => el.classList.remove('active'));
             document.getElementById('step' + step).classList.add('active');
@@ -581,17 +605,16 @@
         function adminLogin() {
             const pwd = document.getElementById('adminPwd').value;
             if(pwd === ADMIN_PASSWORD) {
+                isAdminLogged = true;
                 document.getElementById('adminLogin').classList.add('hidden');
                 document.getElementById('adminDashboard').style.display = 'block';
-                renderAdminPackages(); 
-                loadOrdersFromServer(() => {
-                    renderAdminStats();
-                    renderAdminOrders();
-                });
+                renderAdminStats();
+                renderAdminOrders();
             } else { alert('كلمة مرور خاطئة.'); }
         }
 
         function logoutAdmin() {
+            isAdminLogged = false;
             document.getElementById('adminLogin').classList.remove('hidden');
             document.getElementById('adminDashboard').style.display = 'none';
             switchPage('home');
@@ -600,7 +623,6 @@
         function showAdminView(view, el) {
             document.querySelectorAll('.admin-sidebar li').forEach(li => li.classList.remove('active'));
             if(el) el.classList.add('active');
-            const content = document.getElementById('adminContent');
             if(view === 'overview') renderAdminStats();
             else if(view === 'orders') renderAdminOrders();
             else if(view === 'packages') renderAdminPackages();
@@ -691,13 +713,10 @@
         }
 
         function updateOrderStatus(id, status) {
-            const order = store.orders.find(o => o.id === id);
-            if(order) {
-                order.orderStatus = status;
-                db.ref('orders/' + id).update({ orderStatus: status });
+            db.ref('orders/' + id).update({ orderStatus: status }).then(() => {
                 renderAdminOrders();
                 renderAdminStats();
-            }
+            });
         }
 
         function renderAdminPackages() {
@@ -729,10 +748,13 @@
             const qty = prompt('أدخل العدد:');
             const price = prompt('أدخل السعر (ج.م):');
             if(qty && price) {
-                const newPkg = { id: 'pkg-' + Date.now(), platform: platform.toLowerCase(), quantity: parseInt(qty), price: parseInt(price), description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true };
-                store.packages.push(newPkg);
-                saveState();
-                renderAdminPackages();
+                const newPkg = { platform: platform.toLowerCase(), quantity: parseInt(qty), price: parseInt(price), description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true };
+                db.ref('packages').push(newPkg).then(() => {
+                    loadPackagesFromServer(() => {
+                        renderAdminPackages();
+                        alert('تمت الإضافة بنجاح!');
+                    });
+                });
             }
         }
 
@@ -742,32 +764,25 @@
             const qty = prompt('تعديل العدد:', pkg.quantity);
             const price = prompt('تعديل السعر:', pkg.price);
             const status = prompt('تحديث الحالة (true/false):', pkg.active);
-            if(qty) pkg.quantity = parseInt(qty);
-            if(price) pkg.price = parseInt(price);
-            pkg.active = status === 'true' || status === '1' ? true : false;
-            saveState();
-            renderAdminPackages();
+            
+            if(qty && price) {
+                db.ref('packages/' + id).update({
+                    quantity: parseInt(qty),
+                    price: parseInt(price),
+                    active: status === 'true' || status === '1'
+                }).then(() => {
+                    loadPackagesFromServer(() => renderAdminPackages());
+                });
+            }
         }
 
         function deletePackage(id) {
             if(confirm('هل أنت متأكد من حذف هذه الباقة؟')) {
-                store.packages = store.packages.filter(p => p.id !== id);
-                saveState();
-                renderAdminPackages();
+                db.ref('packages/' + id).remove().then(() => {
+                    loadPackagesFromServer(() => renderAdminPackages());
+                });
             }
         }
 
         function renderAdminInvoices() {
-            const content = document.getElementById('adminContent');
-            let html = `<h3>سجل الفواتير</h3>
-            <input type="text" placeholder="البحث برقم الفاتورة أو اسم العميل..." onkeyup="filterAdminInvoices(this.value)" style="width:100%; padding:10px; margin-bottom:15px; background:var(--bg-dark); border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:white;">
-            <table class="admin-table">
-                <thead><tr><th>رقم الفاتورة</th><th>العميل</th><th>المنصة</th><th>الإجمالي</th><th>التاريخ</th><th>عرض</th></tr></thead>
-                <tbody id="adminInvoicesBody">`;
-            store.orders.forEach(o => {
-                html += `
-                    <tr>
-                        <td>${o.invoiceNumber}</td>
-                        <td>${o.customerName}</td>
-                        <td>${getPlatformName(o.platform)}</td>
-                        <td>${o.total} 
+            const content = document.getElementById('ad
