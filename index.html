@@ -1,16 +1,331 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YSOO200 - Social Media Growth</title>
+    
+    <!-- إضافة مكتبة Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #0b0d15;
+            --bg-card: #14161e;
+            --bg-card-hover: #1c1f2b;
+            --text-main: #ffffff;
+            --text-muted: #9aa0b2;
+            --fb-blue: #1877f2;
+            --ig-pink: #c32aa3;
+            --tt-dark: #010101;
+            --tt-cyan: #25f4ee;
+            --accent: #5865f2;
+            --success: #43b581;
+            --danger: #f04747;
+            --whatsapp-green: #25D366;
+            --instapay-color: #b13aee;
+            --vodafone-color: #e30000;
+            --etisalat-color: #f15a22;
+            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --header-height: 70px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-family); }
+
+        body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; }
+
+        /* --- Header --- */
+        header {
+            background: rgba(11, 13, 21, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: -webkit-linear-gradient(45deg, var(--fb-blue), var(--ig-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            cursor: pointer;
+        }
+
+        .nav-links { display: flex; gap: 25px; align-items: center; }
+        .nav-links a { font-weight: 600; transition: color 0.3s; font-size: 0.95rem; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+        .nav-links a:hover { color: var(--accent); background: rgba(255,255,255,0.05); }
+        .btn-admin { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1); }
+
+        /* --- Main Sections --- */
+        section { padding: 100px 5% 60px; display: none; animation: fadeIn 0.6s ease; }
+        section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Home Hero --- */
+        .hero { text-align: center; padding: 40px 0; position: relative; }
+        .hero h1 { font-size: 3.5rem; background: linear-gradient(135deg, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; }
+        .hero p { color: var(--text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto 40px; }
+        .pillars { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .pillar { background: var(--bg-card); padding: 20px 30px; border-radius: 12px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .pillar:hover { border-color: var(--accent); background: var(--bg-card-hover); }
+
+        /* --- Services Grid --- */
+        .section-title { font-size: 2rem; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+        .section-desc { color: var(--text-muted); margin-bottom: 30px; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        .service-card { background: var(--bg-card); border-radius: 16px; padding: 20px; text-align: center; position: relative; transition: all 0.3s ease; border: 1px solid transparent; overflow: hidden; }
+        .service-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .service-card .platform-badge { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; }
+        
+        .badge-fb { background: var(--fb-blue); color: white; }
+        .badge-ig { background: var(--ig-pink); color: white; }
+        .badge-tt { background: var(--tt-dark); color: white; border: 1px solid var(--tt-cyan); box-shadow: 0 0 5px rgba(37, 244, 238, 0.5); }
+        
+        .service-card h3 { font-size: 2.5rem; margin: 15px 0 5px; font-weight: 800; }
+        .service-card .price-tag { color: var(--text-muted); font-weight: 600; font-size: 1.1rem; margin-bottom: 5px; }
+        .service-card .delivery-info { font-size: 0.8rem; color: var(--success); margin-bottom: 15px; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent), #404eed); border: none; padding: 10px 25px; border-radius: 8px; color: white; font-weight: 700; cursor: pointer; transition: 0.2s; width: 100%; }
+        .btn-primary:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4); }
+
+        /* --- Order Modal & Payment Methods --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: var(--bg-card); border-radius: 16px; padding: 30px; max-width: 480px; width: 100%; border: 1px solid rgba(255,255,255,0.1); position: relative; }
+        .modal-box h2 { margin-bottom: 20px; font-size: 1.5rem;}
+        .modal-close { position: absolute; top: 15px; right: 20px; cursor: pointer; font-size: 1.5rem; color: var(--text-muted); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 5px; color: var(--text-muted); }
+        .form-group input, .form-group select { width: 100%; padding: 10px 15px; background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-size: 1rem; transition: border 0.3s; }
+        .form-group input:focus { outline: none; border-color: var(--accent); }
+        .order-step { display: none; }
+        .order-step.active { display: block; }
+        .payment-badges { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0 15px; }
+        .pay-btn { background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; display: inline-block; border: 1px solid rgba(255,255,255,0.1); }
+        .pay-insta { border-color: var(--instapay-color); color: var(--instapay-color); }
+        .pay-vodafone { border-color: var(--vodafone-color); color: var(--vodafone-color); }
+        .pay-etisalat { border-color: var(--etisalat-color); color: var(--etisalat-color); }
+
+        /* --- Invoice --- */
+        .invoice-container { display: none; margin-top: 20px; background: white; color: #333; padding: 30px; border-radius: 12px; }
+        .invoice-container.active { display: block; }
+        @media print {
+            body * { visibility: hidden; }
+            .invoice-container, .invoice-container * { visibility: visible; }
+            .invoice-container { position: absolute; left: 0; top: 0; width: 100%; margin: 0; border-radius: 0; }
+            .no-print { display: none !important; }
+        }
+
+        /* --- Admin Dashboard --- */
+        .admin-login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); display: flex; justify-content: center; align-items: center; z-index: 3000; flex-direction: column; }
+        .admin-login-overlay.hidden { display: none; }
+        .admin-login-box { background: var(--bg-card); padding: 40px; border-radius: 12px; width: 100%; max-width: 350px; text-align: center; }
+        .admin-login-box input { margin: 15px 0; padding: 12px; width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: white; }
+
+        .dashboard-layout { display: grid; grid-template-columns: 200px 1fr; gap: 20px; min-height: 80vh; }
+        .admin-sidebar { background: var(--bg-card); border-radius: 12px; padding: 20px; }
+        .admin-sidebar ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .admin-sidebar li { padding: 10px 15px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .admin-sidebar li:hover, .admin-sidebar li.active { background: rgba(255,255,255,0.05); }
+        .admin-content { background: var(--bg-card); border-radius: 12px; padding: 20px; overflow-x: auto; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center; }
+        .stat-card h4 { font-size: 0.8rem; color: var(--text-muted); }
+        .stat-card span { font-size: 1.5rem; font-weight: 700; }
+
+        .admin-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .admin-table th, .admin-table td { padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .admin-table th { color: var(--text-muted); }
+        .status-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
+        .status-pending { background: #faa61a; color: black; }
+        .status-completed { background: var(--success); color: white; }
+        
+        .btn-sm { padding: 5px 10px; font-size: 0.7rem; border: none; border-radius: 4px; cursor: pointer; margin: 2px; }
+        .btn-sm:hover { opacity: 0.8; }
+        .btn-edit { background: var(--accent); color: white; }
+        .btn-del { background: var(--danger); color: white; }
+
+        /* --- Image Viewer Modal --- */
+        #imageViewerModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; padding: 20px; }
+        #imageViewerModal.active { display: flex; }
+        #viewerImage { max-width: 100%; max-height: 80vh; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); object-fit: contain; }
+        #closeImageViewerBtn { position: absolute; top: 20px; right: 30px; color: white; font-size: 35px; font-weight: bold; cursor: pointer; background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
+        #closeImageViewerBtn:hover { background: rgba(255,255,255,0.4); }
+
+        /* --- Mobile Responsive --- */
+        @media (max-width: 768px) {
+            header { height: auto; flex-wrap: wrap; justify-content: center; padding: 15px 5%; gap: 10px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; gap: 10px; }
+            .nav-links a { font-size: 0.9rem; padding: 6px 10px; }
+            .hero h1 { font-size: 2.5rem; }
+            .dashboard-layout { grid-template-columns: 1fr; }
+            .admin-sidebar ul { flex-direction: row; overflow-x: auto; }
+            .grid-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="switchPage('home')">YSOO200</div>
+        <nav class="nav-links" id="navLinks">
+            <a onclick="switchPage('home')">الرئيسية</a>
+            <a onclick="switchPage('shop')">الخدمات</a>
+            <a class="btn-admin" onclick="openAdmin()">لوحة التحكم</a>
+        </nav>
+    </header>
+
+    <!-- HOMEPAGE -->
+    <section id="page-home" class="active">
+        <div class="hero">
+            <h1>انمي حسابك الآن</h1>
+            <p>اشتر متابعين حقيقيين لإنستغرام، فيسبوك، وتيك توك. جودة عالية، ضمان مدى الحياة، ودعم فني 24/7.</p>
+            <div class="pillars">
+                <div class="pillar"><span style="color: var(--fb-blue);">⚡</span> دعم 24/7</div>
+                <div class="pillar"><span style="color: var(--success);">🛡️</span> ضمان مدى الحياة</div>
+                <div class="pillar"><span style="color: var(--accent);">🚀</span> تنفيذ فوري</div>
+                <a href="https://wa.me/201021126695" target="_blank" class="pillar" style="cursor:pointer; border-color: var(--whatsapp-green);"><span style="color: var(--whatsapp-green); font-size: 1.2rem;">💬</span> واتساب</a>
+            </div>
+        </div>
+        <h2 class="section-title">لماذا تختار YSOO200؟</h2>
+        <p class="section-desc">المنصة الأكثر ثقة لنمو وسائل التواصل الاجتماعي.</p>
+        <div class="grid-container" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+            <div class="service-card"><h3 style="font-size: 2rem;">🔥</h3><h4>100% حقيقي</h4><p style="color:var(--text-muted);font-size:0.9rem;">متابعين نشطين بجودة عالية.</p></div>
+            <div class="service-card"><h3 style="font-size: 2rem;">⚡</h3><h4>توصيل سريع</h4><p style="color:var(--text-muted);font-size:0.9rem;">المعالجة تبدأ فوراً.</p></div>
+            <div class="service-card"><h3 style="font-size: 2rem;">💳</h3><h4>طرق دفع آمنة</h4><p style="color:var(--text-muted);font-size:0.9rem;">فودافون كاش، إنستا باي، اتصالات.</p></div>
+        </div>
+    </section>
+
+    <!-- SHOP PAGE -->
+    <section id="page-shop">
+        <h2 class="section-title">الخدمات والباقات</h2>
+        <p class="section-desc">اختر منصتك الاجتماعية للبدء.</p>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+            <button class="btn-primary" style="width: auto;" onclick="filterServices('all')">الكل</button>
+            <button class="btn-primary" style="width: auto; background: var(--fb-blue);" onclick="filterServices('facebook')">فيسبوك</button>
+            <button class="btn-primary" style="width: auto; background: var(--ig-pink);" onclick="filterServices('instagram')">إنستغرام</button>
+            <button class="btn-primary" style="width: auto; background: var(--tt-dark); border: 1px solid var(--tt-cyan);" onclick="filterServices('tiktok')">تيك توك</button>
+        </div>
+        <div class="grid-container" id="shop-grid"></div>
+    </section>
+
+    <!-- ADMIN PAGE -->
+    <section id="page-admin">
+        <div id="adminLogin" class="admin-login-overlay">
+            <div class="admin-login-box">
+                <h2>YSOO200 Admin</h2>
+                <input type="password" id="adminPwd" placeholder="كلمة المرور (admin123)">
+                <button class="btn-primary" onclick="adminLogin()">دخول</button>
+            </div>
+        </div>
+        <div id="adminDashboard" style="display:none;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                <h2>لوحة التحكم</h2>
+                <button onclick="logoutAdmin()" style="background:transparent; border:1px solid var(--danger); color:var(--danger); padding:5px 15px; border-radius:6px; cursor:pointer;">خروج</button>
+            </div>
+            <div class="dashboard-layout">
+                <div class="admin-sidebar">
+                    <ul>
+                        <li class="active" onclick="showAdminView('overview', this)">الملخص</li>
+                        <li onclick="showAdminView('orders', this)">الطلبات</li>
+                        <li onclick="showAdminView('packages', this)">الباقات</li>
+                        <li onclick="showAdminView('invoices', this)">الفواتير</li>
+                    </ul>
+                </div>
+                <div class="admin-content" id="adminContent"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ORDER MODAL -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal-box">
+            <span class="modal-close" onclick="closeModal()">✕</span>
+            <h2 id="modalTitle">طلب المتابعين</h2>
+            <div id="orderSteps">
+                <div class="order-step active" id="step1">
+                    <div class="form-group">
+                        <label>المنصة</label>
+                        <select id="orderPlatform">
+                            <option value="instagram">إنستغرام</option>
+                            <option value="facebook">فيسبوك</option>
+                            <option value="tiktok">تيك توك</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>العدد</label><input type="number" id="orderQuantity" placeholder="مثال: 500" required></div>
+                    <div class="form-group"><label>السعر (ج.م)</label><input type="text" id="orderPrice" readonly></div>
+                    <button class="btn-primary" onclick="nextStep(2)">التالي: معلومات الحساب</button>
+                </div>
+                <div class="order-step" id="step2">
+                    <div class="form-group"><label>رابط الحساب أو الصفحة</label><input type="text" id="orderAccount" placeholder="https://www.instagram.com/..." required></div>
+                    <div class="form-group"><label>اسمك</label><input type="text" id="orderName" placeholder="أحمد علي" required></div>
+                    <div class="form-group"><label>رقم التواصل (هاتف أو إيميل)</label><input type="text" id="orderContact" placeholder="01012345678" required></div>
+                    <button class="btn-primary" onclick="nextStep(3)">مراجعة الطلب</button>
+                    <button style="width:100%; margin-top:10px; background:transparent; border:none; color:var(--text-muted); cursor:pointer;" onclick="prevStep(1)">رجوع</button>
+                </div>
+                <div class="order-step" id="step3">
+                    <h3 style="font-size:1.2rem;">تأكيد الطلب</h3>
+                    <div style="background:var(--bg-dark); padding:15px; border-radius:8px; margin:15px 0;">
+                        <p><strong>المنصة:</strong> <span id="rPlatform"></span></p>
+                        <p><strong>العدد:</strong> <span id="rQuantity"></span></p>
+                        <p><strong>السعر الإجمالي:</strong> <span id="rPrice"></span> ج.م</p>
+                        <p><strong>الحساب:</strong> <span id="rAccount"></span></p>
+                        <p><strong>العميل:</strong> <span id="rName"></span></p>
+                    </div>
+                    <div style="margin: 15px 0; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                        <p style="font-weight: bold; margin-bottom: 10px; font-size: 1.1rem;">💳 طريقة الدفع:</p>
+                        <div class="payment-badges">
+                            <span class="pay-btn pay-insta">💜 إنستا باي: 01155325652</span>
+                            <span class="pay-btn pay-vodafone">❤️ فودافون كاش: 01021126695</span>
+                            <span class="pay-btn pay-etisalat">🧡 اتصالات كاش: 01155325652</span>
+                        </div>
+                        <div>
+                            <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 5px; color: var(--text-muted);">📸 صورة التحويل (اختياري):</label>
+                            <input type="file" accept="image/*" id="paymentProof" style="width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white;">
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="placeOrder()">تأكيد الطلب</button>
+                    <button style="width:100%; margin-top:10px; background:transparent; border:none; color:var(--text-muted); cursor:pointer;" onclick="prevStep(2)">رجوع</button>
+                </div>
+            </div>
+            <div class="invoice-container" id="invoiceBox">
+                <h2 style="color: black; margin-bottom: 20px;">YSOO200 فاتورة</h2>
+                <div id="invoiceContent"></div>
+                <div class="no-print" style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn-primary" style="background:var(--success); width: auto;" onclick="window.print()">🖨️ طباعة الفاتورة</button>
+                    <button class="btn-primary" style="background:var(--accent); width: auto;" onclick="copyInvoiceId()">📋 نسخ رقم الفاتورة</button>
+                    <button class="btn-primary" style="background:var(--bg-dark); width: auto; color: white;" onclick="closeModal()">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMAGE VIEWER MODAL -->
+    <div id="imageViewerModal">
+        <span id="closeImageViewerBtn" onclick="closeImageViewer()">&times;</span>
+        <img id="viewerImage" src="" alt="صورة الدفع">
+    </div>
+
     <script>
-        // ✅ تم وضع رابط Firebase الخاص بك هنا
         const FIREBASE_DB_URL = 'https://william-b47a3-default-rtdb.firebaseio.com/';
         const firebaseConfig = { databaseURL: FIREBASE_DB_URL };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         
-        // 🔑 كلمة المرور
         const ADMIN_PASSWORD = 'admin123';
 
-        // ✅ الباقات والأسعار
         const initialPackages = [
-            // Facebook
             { id: 'fb-1', platform: 'facebook', quantity: 500, price: 25, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-2', platform: 'facebook', quantity: 1000, price: 50, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-3', platform: 'facebook', quantity: 2000, price: 100, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -31,7 +346,6 @@
             { id: 'fb-18', platform: 'facebook', quantity: 19000, price: 1200, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-19', platform: 'facebook', quantity: 20000, price: 1400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
 
-            // Instagram
             { id: 'ig-1', platform: 'instagram', quantity: 500, price: 70, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-2', platform: 'instagram', quantity: 1000, price: 140, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-3', platform: 'instagram', quantity: 2000, price: 280, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -40,7 +354,6 @@
             { id: 'ig-6', platform: 'instagram', quantity: 5000, price: 700, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-7', platform: 'instagram', quantity: 10000, price: 1400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
 
-            // TikTok
             { id: 'tt-1', platform: 'tiktok', quantity: 500, price: 70, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'tt-2', platform: 'tiktok', quantity: 1000, price: 155, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'tt-3', platform: 'tiktok', quantity: 2000, price: 310, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -455,6 +768,4 @@
 
         function filterAdminInvoices(val) {
             const rows = document.querySelectorAll('#adminInvoicesBody tr');
-            rows.forEach(row => { const text = row.innerText.toLowerCase(); row.style.display = text.includes(val.toLowerCase()) ? '' : 'none'; });
-        }
-    </script>
+            rows.forEach(row => { const text = row.innerText.toLowerCase(); r
