@@ -88,7 +88,6 @@
         .service-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .service-card .platform-badge { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; }
         
-        /* Badges Colors */
         .badge-fb { background: var(--fb-blue); color: white; }
         .badge-ig { background: var(--ig-pink); color: white; }
         .badge-tt { background: var(--tt-dark); color: white; border: 1px solid var(--tt-cyan); box-shadow: 0 0 5px rgba(37, 244, 238, 0.5); }
@@ -269,7 +268,7 @@
                     <button class="btn-primary" onclick="nextStep(2)">التالي: معلومات الحساب</button>
                 </div>
                 <div class="order-step" id="step2">
-                    <div class="form-group"><label>رابط الحساب أو الصفحة</label><input type="text" id="orderAccount" placeholder="https://www.tiktok.com/@..." required></div>
+                    <div class="form-group"><label>رابط الحساب أو الصفحة</label><input type="text" id="orderAccount" placeholder="https://www.instagram.com/..." required></div>
                     <div class="form-group"><label>اسمك</label><input type="text" id="orderName" placeholder="أحمد علي" required></div>
                     <div class="form-group"><label>رقم التواصل (هاتف أو إيميل)</label><input type="text" id="orderContact" placeholder="01012345678" required></div>
                     <button class="btn-primary" onclick="nextStep(3)">مراجعة الطلب</button>
@@ -330,7 +329,7 @@
 
         // ✅ تحديث الباقات والأسعار بناءً على الصور + إضافة تيك توك
         const initialPackages = [
-            // Facebook Packages (Updated)
+            // Facebook
             { id: 'fb-1', platform: 'facebook', quantity: 500, price: 25, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-2', platform: 'facebook', quantity: 1000, price: 50, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-3', platform: 'facebook', quantity: 2000, price: 100, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -351,7 +350,7 @@
             { id: 'fb-18', platform: 'facebook', quantity: 19000, price: 1200, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'fb-19', platform: 'facebook', quantity: 20000, price: 1400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
 
-            // Instagram Packages (Updated)
+            // Instagram
             { id: 'ig-1', platform: 'instagram', quantity: 500, price: 70, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-2', platform: 'instagram', quantity: 1000, price: 140, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-3', platform: 'instagram', quantity: 2000, price: 280, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -360,7 +359,7 @@
             { id: 'ig-6', platform: 'instagram', quantity: 5000, price: 700, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'ig-7', platform: 'instagram', quantity: 10000, price: 1400, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
 
-            // TikTok Packages (New)
+            // TikTok
             { id: 'tt-1', platform: 'tiktok', quantity: 500, price: 70, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'tt-2', platform: 'tiktok', quantity: 1000, price: 155, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
             { id: 'tt-3', platform: 'tiktok', quantity: 2000, price: 310, description: 'متابعين حقيقيين', deliveryInfo: 'فوري', active: true },
@@ -385,12 +384,20 @@
         ];
 
         let store = {
-            // تم تغيير الاسم إلى v2 لضمان تحديث الأسعار للجميع
-            packages: JSON.parse(localStorage.getItem('ysoo200_packages_v2')) || initialPackages,
+            // تم تغيير الاسم إلى v3 لضمان تحديث الأسعار وتجاوز الكاش القديم
+            packages: JSON.parse(localStorage.getItem('ysoo200_packages_v3')) || initialPackages,
             orders: []
         };
 
-        function saveState() { localStorage.setItem('ysoo200_packages_v2', JSON.stringify(store.packages)); }
+        function saveState() { localStorage.setItem('ysoo200_packages_v3', JSON.stringify(store.packages)); }
+
+        // دالة مساعدة لجلب اسم المنصة بالعربية
+        function getPlatformName(platform) {
+            if (platform === 'facebook') return 'فيسبوك';
+            if (platform === 'instagram') return 'إنستغرام';
+            if (platform === 'tiktok') return 'تيك توك';
+            return platform;
+        }
 
         // دالة لجلب الطلبات من السيرفر وتحديث الواجهة
         function loadOrdersFromServer(callback) {
@@ -414,14 +421,6 @@
             window.scrollTo(0,0);
         }
 
-        // دالة مساعدة لجلب اسم المنصة بالعربية
-        function getPlatformName(platform) {
-            if (platform === 'facebook') return 'فيسبوك';
-            if (platform === 'instagram') return 'إنستغرام';
-            if (platform === 'tiktok') return 'تيك توك';
-            return platform;
-        }
-
         function renderShop(filter = 'all') {
             const grid = document.getElementById('shop-grid');
             grid.innerHTML = '';
@@ -431,7 +430,6 @@
                 return;
             }
             items.forEach(pkg => {
-                // تحديد لون البادج حسب المنصة
                 const badge = pkg.platform === 'facebook' ? 'badge-fb' : (pkg.platform === 'instagram' ? 'badge-ig' : 'badge-tt');
                 const card = document.createElement('div');
                 card.className = 'service-card';
@@ -609,7 +607,7 @@
             const totalSales = store.orders.reduce((acc, o) => acc + (o.orderStatus === 'completed' ? o.total : 0), 0);
             const igOrders = store.orders.filter(o => o.platform === 'instagram').length;
             const fbOrders = store.orders.filter(o => o.platform === 'facebook').length;
-            const ttOrders = store.orders.filter(o => o.platform === 'tiktok').length; // إضافة إحصائية تيك توك
+            const ttOrders = store.orders.filter(o => o.platform === 'tiktok').length; // إضافة تيك توك
             
             content.innerHTML = `
                 <h3>الملخص</h3>
@@ -764,4 +762,5 @@
                         <td>${o.customerName}</td>
                         <td>${getPlatformName(o.platform)}</td>
                         <td>${o.total} ج.م</td>
-       
+                        <td>${o.date}</td>
+                        <td><button class="btn-sm btn-edit" onclick="viewInvoice('${o
